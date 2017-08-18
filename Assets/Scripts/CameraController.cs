@@ -20,13 +20,16 @@ public class CameraController : RingWalker {
 
 	private void Update() {
 
-		float target = player.RingDegrees;
-		target += player.body.velocity.xz().magnitude * (player.facingRight ? 1 : -1);
+		float targetDeg = RingDegrees(player.transform.position);
+		float currentDeg = RingDegrees(transform.position);
 
-		this.RingDegrees = Mathf.LerpAngle(this.RingDegrees, target, angleSpeed * Time.deltaTime);
-		this.RingRadius = LockBodyToMap.RADIUS + dist;
-		transform.rotation = Quaternion.LookRotation(-transform.position.SetY(0));
-		transform.position = transform.position.SetY(y);
+		// Look-ahead factor
+		targetDeg += player.Body.velocity.xz().magnitude * (player.FacingRight ? 1 : -1);
+		
+		float newDeg = Mathf.LerpAngle(currentDeg, targetDeg, angleSpeed * Time.deltaTime);
+		
+		transform.position = RingPosition(newDeg, RingData.Radius + dist, y);
+		transform.rotation = RingRotation(transform.position);
 	}
 
 }

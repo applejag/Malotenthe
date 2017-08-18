@@ -25,7 +25,7 @@ public class PlayerController : RingWalker {
 		base.Awake();
 
 		sprite = GetComponentInChildren<SpriteRenderer>();
-		facingRight = true;
+		FacingRight = true;
 	}
 
 	private void Update() {
@@ -52,15 +52,15 @@ public class PlayerController : RingWalker {
 
 		if (horiZero && grounded) {
 			// Try counteract the movement.
-			body.AddForce(-body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
+			Body.AddForce(-Body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
 		} else {
-			body.AddForce(transform.right * horizontal * velocityAcceleration * Time.deltaTime);
+			Body.AddForce(transform.right * horizontal * velocityAcceleration * Time.deltaTime);
 
-			body.velocity = Vector2.ClampMagnitude(body.velocity.xz(), velocityTerminal).x_y(body.velocity.y);
+			Body.velocity = Vector2.ClampMagnitude(Body.velocity.xz(), velocityTerminal).x_y(Body.velocity.y);
 		}
 
 		if (jump && grounded) {
-			body.velocity = body.velocity.SetY(velocityJump);
+			Body.velocity = Body.velocity.SetY(velocityJump);
 		}
 
 		/**
@@ -69,7 +69,7 @@ public class PlayerController : RingWalker {
 
 		if (!horiZero) {
 			sprite.flipX = horizontal < 0;
-			facingRight = !sprite.flipX;
+			FacingRight = !sprite.flipX;
 		}
 
 		/**
@@ -77,8 +77,11 @@ public class PlayerController : RingWalker {
 		*/
 
 		if (fire) {
-			Vector3 forward = facingRight ? transform.right : -transform.right;
-			var clone = Instantiate(bulletPrefab, LockBodyToMap.LockPosition(transform.position + forward * 2), Quaternion.LookRotation(forward));
+			Vector3 forward = FacingRight ? transform.right : -transform.right;
+			Vector3 position = RingPosition(transform.position + forward * 2);
+			Quaternion rotation = RingRotation(position);
+
+			var clone = Instantiate(bulletPrefab, position, rotation);
 			var c_body = clone.GetComponent<Rigidbody>();
 
 			c_body.AddForce(forward * 50, ForceMode.Impulse);
