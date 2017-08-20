@@ -135,7 +135,7 @@ namespace ExtensionMethods {
 			return Mathf.Max(vector.x, vector.y);
 		}
 
-		public static float MinxValue(this Vector3 vector) {
+		public static float MinValue(this Vector3 vector) {
 			return Mathf.Min(vector.x, vector.y, vector.z);
 		}
 		public static float MinValue(this Vector2 vector) {
@@ -146,10 +146,33 @@ namespace ExtensionMethods {
 			return Quaternion.Euler(euler) * Vector3.forward;
 		}
 
-		/// <summary>
-		/// <exception cref="NotImplementedException">Warning, not implemented yet!</exception></summary>
 		public static Vector3 VectorToEuler(this Vector3 vector) {
-			throw new NotImplementedException();
+			return Quaternion.LookRotation(vector).eulerAngles;
+		}
+
+		public static Vector3 FlipX(this Vector3 vector)
+		{
+			return new Vector3(-vector.x, vector.y, vector.z);
+		}
+
+		public static Vector2 FlipX(this Vector2 vector)
+		{
+			return new Vector2(-vector.x, vector.y);
+		}
+
+		public static Vector3 FlipY(this Vector3 vector)
+		{
+			return new Vector3(vector.x, -vector.y, vector.z);
+		}
+
+		public static Vector2 FlipY(this Vector2 vector)
+		{
+			return new Vector2(vector.x, -vector.y);
+		}
+
+		public static Vector3 FlipZ(this Vector3 vector)
+		{
+			return new Vector3(vector.x, vector.y, -vector.z);
 		}
 
 	}

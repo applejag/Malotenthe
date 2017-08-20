@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : RingWalker {
+public class CameraController : RingObject {
 
 	public float angleSpeed = 90;
 	public float dist = 12;
 	public float y = 5;
+	[Range(0,1)]
+	public float lookAheadFactor = 0.5f;
 
 	private PlayerController player;
 
-	protected override void Awake() {
-		base.Awake();
+	void Awake() {
 		player = FindObjectOfType<PlayerController>();
 
 		enabled = player != null;
@@ -24,7 +25,7 @@ public class CameraController : RingWalker {
 		float currentDeg = RingDegrees(transform.position);
 
 		// Look-ahead factor
-		targetDeg += player.Body.velocity.xz().magnitude * (player.FacingRight ? 1 : -1);
+		targetDeg += player.Body.velocity.xz().magnitude * (player.IsFacingRight ? 1 : -1) * lookAheadFactor;
 		
 		float newDeg = Mathf.LerpAngle(currentDeg, targetDeg, angleSpeed * Time.deltaTime);
 		

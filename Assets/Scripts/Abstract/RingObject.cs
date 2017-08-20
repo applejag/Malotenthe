@@ -1,32 +1,11 @@
-﻿using System.Collections;
+﻿using ExtensionMethods;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ExtensionMethods;
-using System;
 
-public class RingWalker : MonoBehaviour {
+public abstract class RingObject : MonoBehaviour
+{
 
-	public bool FacingRight { get; protected set; }
-
-	private Rigidbody m_Body;
-	public Rigidbody Body { get { return m_Body; } }
-
-	protected virtual void Awake() {
-		m_Body = GetComponent<Rigidbody>();
-	}
-
-	protected virtual void FixedUpdate()
-	{
-		if (Body) {
-			Vector3 position = Body.position;
-
-			// Set position but with interpolation
-			Body.MovePosition(RingPosition(position));
-
-			// Look towards the center
-			Body.MoveRotation(RingRotation(position));
-		}
-	}
 
 	/// <summary>
 	/// Returns a new position from <paramref name="degrees"/> that's on the ring
@@ -85,39 +64,54 @@ public class RingWalker : MonoBehaviour {
 		return Vector3.ProjectOnPlane(direction, normal);
 	}
 
+	/// <summary>
+	/// Raycasts on the circle. Makes multiple rays if the ray is too long and bends it around the ring.
+	/// </summary>
 	public static bool RingRaycast(Vector3 position, Vector3 forward, out RingRaycastHit hit, float maxDistance, int layerMask)
 	{
-		float radius = position.magnitude;
+		return RingRaycast(position, forward, out hit, maxDistance, layerMask, RingData.Radius);
+	}
+
+	/// <summary>
+	/// Raycasts on a custom circle. Makes multiple rays if the ray is too long and bends it around the ring.
+	/// </summary>
+	public static bool RingRaycast(Vector3 position, Vector3 forward, out RingRaycastHit hit, float maxDistance, int layerMask, float radius)
+	{
+		bool success = false;
 		forward = RingProjectDirection(position, forward).normalized;
 
 		List<Vector3> origins = new List<Vector3> { position };
 		RaycastHit rayhit;
 
+		// Too long ray, split it up
 		while (maxDistance > RingData.RayMaxDistance) {
-			Debug.DrawRay(position, forward.normalized * RingData.RayMaxDistance, Color.cyan, 2);
 
-			if (Physics.Raycast(position, forward, out rayhit, RingData.RayMaxDistance, layerMask)) {
-				hit = new RingRaycastHit {
-					hit = rayhit,
-					origins = origins.ToArray(),
-					lastPoint = rayhit.point,
-				};
-				return true;
-			}
+			if (success = Physics.Raycast(position, forward, out rayhit, RingData.RayMaxDistance, layerMask)) {
+				goto FinishedCasting;
+			} else
+				Debug.DrawRay(position, forward.normalized * maxDistance, Color.cyan, 2);
 
 			maxDistance -= RingData.RayArcDistance;
-			position = RingPosition(position + forward * RingData.RayArcDistance);
+			position = RingPosition(position + forward * RingData.RayMaxDistance, radius);
 			forward = RingProjectDirection(position, forward).normalized;
 			origins.Add(position);
 		}
 
-		Debug.DrawRay(position, forward.normalized * maxDistance, Color.cyan, 2);
-		bool success = Physics.Raycast(position, forward, out rayhit, maxDistance, layerMask);
+		// One last ray
+		success = Physics.Raycast(position, forward, out rayhit, maxDistance, layerMask);
 
+		FinishedCasting:
+
+		if (success)
+			Debug.DrawLine(position, rayhit.point, Color.red, 2);
+		else
+			Debug.DrawRay(position, forward.normalized * maxDistance, Color.cyan, 2);
+
+		// Custom struct
 		hit = new RingRaycastHit {
 			hit = rayhit,
 			origins = origins.ToArray(),
-			lastPoint = success ? rayhit.point : RingPosition(position + forward * RingData.RayArcDistance),
+			lastPoint = success ? rayhit.point : RingPosition(position + forward * maxDistance, radius),
 		};
 
 		return success;
