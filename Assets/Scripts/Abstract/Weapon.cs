@@ -5,7 +5,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public abstract class Weapon : MonoBehaviour {
-	
+
+	public Transform shootPoint;
 	public Vector2 bulletOffset;
 	public Vector2 bulletDirection = Vector3.right;
 
@@ -33,6 +34,15 @@ public abstract class Weapon : MonoBehaviour {
 
 		transform.localEulerAngles = new Vector3(0, 0, IsFacingRight ? angle : angle - 180);
 		Sprite.flipX = flipX;
+
+		if (shootPoint) {
+			Vector3 position = GetShootPosition();
+			Vector3 direction = GetShootDirection(position);
+			Quaternion rotation = Quaternion.LookRotation(direction);
+
+			shootPoint.position = position;
+			shootPoint.rotation = rotation;
+		}
 	}
 
 	protected virtual void OnEnable()

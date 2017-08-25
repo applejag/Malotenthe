@@ -77,7 +77,6 @@ public class PlayerController : RingWalker {
 
 		// Rotate gun
 		weapon.SetRotation(angleTowardsMouse, !IsFacingRight);
-		weapon.enabled = Grounded;
 
 		spriteBody.flipX = !IsFacingRight;
 

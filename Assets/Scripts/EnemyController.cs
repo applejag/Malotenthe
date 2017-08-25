@@ -11,10 +11,10 @@ public class EnemyController : RingWalker {
 	public float velocityTerminal = 8;
 
 	[Header("Shooting")]
-	public BoxCollider shootingTrigger;
 	public GameObject bulletPrefab;
 	public Vector2 bulletOffset;
 	public Vector2 bulletDirection = Vector2.right;
+	public float bulletRange = 5;
 
 	[Header("Health")]
 	public int health = 20;
@@ -46,7 +46,7 @@ public class EnemyController : RingWalker {
 		AnimatorStateInfo animState = animBody.GetCurrentAnimatorStateInfo(0);
 		bool isFiring = animState.IsTag("Shooting");
 		bool isMoving = animState.IsTag("Moving");
-		bool inRange = isFiring == false && HittingPlayer();
+		bool inRange = isFiring == false && PlayerInRange();
 
 		/**
 		 *	MOVEMENT
@@ -77,24 +77,17 @@ public class EnemyController : RingWalker {
 		}
 	}
 
-	private bool HittingPlayer()
+	private bool PlayerInRange()
 	{
+#if UNITY_EDITOR
+		player = player ?? FindObjectOfType<PlayerController>();
+#endif
 		if (!player) return false;
 
-		Vector3 localPos = shootingTrigger.transform.localPosition;
-		localPos.x = IsFacingRight ? Mathf.Abs(localPos.x) : -Mathf.Abs(localPos.x);
-		shootingTrigger.transform.localPosition = localPos;
+		Vector3 playerPos = player.transform.position;
+		float dist = Vector3.Distance(playerPos, transform.position);
 
-		Vector3 center = shootingTrigger.transform.TransformPoint(shootingTrigger.center);
-		Vector3 halfSize = shootingTrigger.transform.TransformVector(shootingTrigger.size * 0.5f);
-		Quaternion rotation = shootingTrigger.transform.rotation;
-
-		Collider[] colliders = Physics.OverlapBox(center, halfSize, rotation);
-		foreach (Collider col in colliders) {
-			if (col.transform.IsChildOf(player.transform))
-				return true;
-		}
-		return false;
+		return dist <= bulletRange;
 	}
 
 	private void AnimationEvent_Shoot()
@@ -121,6 +114,9 @@ public class EnemyController : RingWalker {
 			Vector3 direction = RingProjectDirection(position, transform.TransformDirection(bulletDirection)).normalized;
 			Gizmos.DrawRay(position, direction);
 		}
+
+		Gizmos.color = PlayerInRange() ? Color.red : Color.cyan;
+		Gizmos.DrawWireSphere(transform.position, bulletRange);
 	}
 
 	public void Damage(int damage)

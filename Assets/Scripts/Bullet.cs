@@ -54,13 +54,17 @@ public class Bullet : RingObject
 	
 	private void SelfDestruct()
 	{
-		particles.transform.SetParent(null);
-		var em = particles.emission;
-		em.enabled = false;
-		Destroy(particles.gameObject, particles.main.startLifetime.constantMax);
+		if (particles) {
+			particles.transform.SetParent(null);
+			var em = particles.emission;
+			em.enabled = false;
+			Destroy(particles.gameObject, particles.main.startLifetime.constantMax);
+		}
 
-		trail.transform.SetParent(null);
-		trail.autodestruct = true;
+		if (trail) {
+			trail.transform.SetParent(null);
+			trail.autodestruct = true;
+		}
 
 		Destroy(gameObject);
 	}

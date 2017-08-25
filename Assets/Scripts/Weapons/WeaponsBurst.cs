@@ -26,11 +26,7 @@ public class WeaponsBurst : Weapon
 
 	void SpawnBullet()
 	{
-		Vector3 position = GetShootPosition();
-		Vector3 direction = GetShootDirection(position);
-		Quaternion rotation = Quaternion.LookRotation(direction);
-
-		Instantiate(bulletPrefab, position, rotation);
+		Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
 
 		Anim.SetTrigger("Shoot");
 	}
