@@ -23,8 +23,11 @@ public class EnemyController : RingWalker {
 	[Header("Animations")]
 	public Animator animBody;
 	public SpriteRenderer spriteBody;
+	public SpriteRenderer spriteHead;
+	public SpriteRenderer spriteBackleg;
 
-	private PlayerController player;
+    private PlayerController player;
+    private bool aimAtPlayer = true;
 
 	protected override void Awake()
 	{
@@ -41,12 +44,16 @@ public class EnemyController : RingWalker {
 
 		float horizontal = player != null ? (Mathf.DeltaAngle(RingDegrees(transform.position), RingDegrees(player.transform.position)) < 0 ? -1 : 1) : 0;
 		bool horiZero = Mathf.Approximately(horizontal, 0);
-		IsFacingRight = horizontal > 0;
+		isFacingRight = horizontal > 0;
 
 		AnimatorStateInfo animState = animBody.GetCurrentAnimatorStateInfo(0);
 		bool isFiring = animState.IsTag("Shooting");
 		bool isMoving = animState.IsTag("Moving");
 		bool inRange = isFiring == false && PlayerInRange();
+
+	    float angleTowardsPlayer = AngleTowardsPlayer();
+	    bool playerRightFromMe;
+        CalculateRotation(angleTowardsPlayer, out angleTowardsPlayer, out playerRightFromMe);
 
 		/**
 		 *	MOVEMENT
@@ -72,12 +79,31 @@ public class EnemyController : RingWalker {
 		animBody.SetBool("Grounded", Grounded);
 		animBody.SetBool("In Range", inRange);
 
-		if (!horiZero) {
-			spriteBody.flipX = !IsFacingRight;
+	    if (isFiring)
+	    {
+            if (aimAtPlayer)
+    	        spriteHead.transform.localEulerAngles = new Vector3(0, 0, angleTowardsPlayer);
+	        spriteHead.flipX = 
+            spriteBody.flipX = 
+	        spriteBackleg.flipX = !playerRightFromMe;
+	    }
+        else if (!horiZero)
+	    {
+	        aimAtPlayer = true;
+		    spriteBackleg.flipX =
+            spriteHead.flipX =
+            spriteBody.flipX = !isFacingRight;
 		}
 	}
 
-	private bool PlayerInRange()
+    float AngleTowardsPlayer()
+    {
+        if (!player) return 0;
+        Vector3 direction = transform.InverseTransformDirection(player.transform.position - transform.position);
+        return (direction.xy().ToDegrees() + 360) % 360;
+    }
+
+    private bool PlayerInRange()
 	{
 #if UNITY_EDITOR
 		player = player ?? FindObjectOfType<PlayerController>();
@@ -92,28 +118,33 @@ public class EnemyController : RingWalker {
 
 	private void AnimationEvent_Shoot()
 	{
-		print(transform.GetPath() + " fired!");
-		//Vector3 position = RingPosition(transform.TransformPoint(IsFacingRight ? bulletOffset.x : -bulletOffset.x, bulletOffset.y, 0));
-		//Vector3 direction = RingProjectDirection(position, transform.TransformDirection(IsFacingRight ? bulletDirection.x : -bulletDirection.x, bulletDirection.y, 0));
-		//Quaternion rotation = Quaternion.LookRotation(direction);
+	    if (bulletPrefab == null) return;
 
-		//Instantiate(bulletPrefab, position, rotation);
-	}
+	    Vector3 position = GetShootPosition();
+	    Vector3 direction = GetShootDirection(position);
+        Quaternion rotation = Quaternion.LookRotation(direction);
 
-	protected override void OnDrawGizmosSelected()
+        Instantiate(bulletPrefab, position, rotation);
+    }
+
+    private void AnimationEvent_ContinueAiming()
+    {
+        aimAtPlayer = true;
+    }
+
+    private void AnimationEvent_StopAiming()
+    {
+        aimAtPlayer = false;
+    }
+
+    protected override void OnDrawGizmosSelected()
 	{
 		base.OnDrawGizmosSelected();
 
 		Gizmos.color = Color.red;
-		if (UnityEditor.EditorApplication.isPlaying && IsFacingRight == false) {
-			Vector3 position = RingPosition(transform.TransformPoint(bulletOffset.FlipX()));
-			Vector3 direction = RingProjectDirection(position, transform.TransformDirection(bulletDirection).FlipX()).normalized;
-			Gizmos.DrawRay(position, direction);
-		} else {
-			Vector3 position = RingPosition(transform.TransformPoint(bulletOffset));
-			Vector3 direction = RingProjectDirection(position, transform.TransformDirection(bulletDirection)).normalized;
-			Gizmos.DrawRay(position, direction);
-		}
+	    Vector3 position = GetShootPosition();
+	    Vector3 direction = GetShootDirection(position);
+        Gizmos.DrawRay(position, direction);
 
 		Gizmos.color = PlayerInRange() ? Color.red : Color.cyan;
 		Gizmos.DrawWireSphere(transform.position, bulletRange);
@@ -134,5 +165,24 @@ public class EnemyController : RingWalker {
 		} else
 			animBody.SetTrigger("Hit");
 	}
+
+
+    protected Vector3 GetShootPosition()
+    {
+#if UNITY_EDITOR
+        if (UnityEditor.EditorApplication.isPlaying == false) return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
+#endif
+        if (isFacingRight) return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
+        else return RingPosition(spriteHead.transform.TransformPoint(bulletOffset.FlipX()));
+    }
+
+    protected Vector3 GetShootDirection(Vector3 position)
+    {
+#if UNITY_EDITOR
+        if (UnityEditor.EditorApplication.isPlaying == false) return RingProjectDirection(position, spriteHead.transform.TransformDirection(bulletDirection)).normalized;
+#endif
+        if (isFacingRight) return RingProjectDirection(position, spriteHead.transform.TransformDirection(bulletDirection)).normalized;
+        else return RingProjectDirection(position, spriteHead.transform.TransformDirection(bulletDirection.FlipX())).normalized;
+    }
 
 }

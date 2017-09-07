@@ -25,7 +25,7 @@ public class CameraController : RingObject {
 		float currentDeg = RingDegrees(transform.position);
 
 		// Look-ahead factor
-		targetDeg += player.Body.velocity.xz().magnitude * (player.IsFacingRight ? 1 : -1) * lookAheadFactor;
+		targetDeg += player.Body.velocity.xz().magnitude * (player.isFacingRight ? 1 : -1) * lookAheadFactor;
 		
 		float newDeg = Mathf.LerpAngle(currentDeg, targetDeg, angleSpeed * Time.deltaTime);
 		

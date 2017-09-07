@@ -7,7 +7,7 @@ using System;
 public abstract class RingWalker : RingObject
 {
 
-	public bool IsFacingRight { get; protected set; }
+    public bool isFacingRight;
 	public bool Grounded { get; protected set; }
 
 	[Header("Grounded")]
@@ -55,5 +55,12 @@ public abstract class RingWalker : RingObject
 		// Look towards the center
 		Body.MoveRotation(RingRotation(position));
 	}
+
+
+    public static void CalculateRotation(float inAngle, out float outAngle, out bool facingRight)
+    {
+        facingRight = inAngle < 90 || inAngle > 270;
+        outAngle = facingRight ? inAngle : inAngle - 180;
+    }
 
 }

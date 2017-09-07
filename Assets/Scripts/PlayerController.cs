@@ -27,7 +27,7 @@ public class PlayerController : RingWalker {
 	protected override void Awake() {
 		base.Awake();
 		
-		IsFacingRight = true;
+		isFacingRight = true;
 	}
 
 	private void Update() {
@@ -45,9 +45,10 @@ public class PlayerController : RingWalker {
 
 		float angleTowardsMouse = AngleTowardsMouse(weapon.transform.position);
 		// - => right, + => left
-		IsFacingRight = angleTowardsMouse < 90 || angleTowardsMouse > 270;
+	    float weaponAngle;
+        CalculateRotation(angleTowardsMouse, out weaponAngle, out isFacingRight);
 
-		bool runningBackwards = (horizontal > 0 && !IsFacingRight) || (horizontal < 0 && IsFacingRight);
+		bool runningBackwards = (horizontal > 0 && !isFacingRight) || (horizontal < 0 && isFacingRight);
 
 		/**
 		 *	MOVEMENT
@@ -76,9 +77,8 @@ public class PlayerController : RingWalker {
 		animBody.SetBool("Grounded", Grounded);
 
 		// Rotate gun
-		weapon.SetRotation(angleTowardsMouse, !IsFacingRight);
-
-		spriteBody.flipX = !IsFacingRight;
+		weapon.SetRotation(angleTowardsMouse, weaponAngle, isFacingRight);
+		spriteBody.flipX = !isFacingRight;
 
 		/**
 		 *	SHOOTING

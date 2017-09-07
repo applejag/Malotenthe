@@ -38,12 +38,19 @@ public class Bullet : RingObject
 
 		if (hitAnything) {
 
-			EnemyController enemy = hit.hit.rigidbody ? hit.hit.rigidbody.GetComponent<EnemyController>() : null;
-			if (enemy) {
-				enemy.Damage(damage);
-			}
+		    EnemyController enemy = hit.hit.rigidbody ? hit.hit.rigidbody.GetComponent<EnemyController>() : null;
+		    if (enemy)
+		    {
+		        enemy.Damage(damage);
+		    }
 
-			SelfDestruct();
+		    PlayerController player = hit.hit.rigidbody ? hit.hit.rigidbody.GetComponent<PlayerController>() : null;
+		    if (player)
+		    {
+		        player.Damage(damage);
+		    }
+
+            SelfDestruct();
 		}
 	}
 

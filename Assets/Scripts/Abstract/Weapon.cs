@@ -23,17 +23,17 @@ public abstract class Weapon : MonoBehaviour {
 		Anim = GetComponent<Animator>();
 	}
 
-	public virtual void SetRotation(float angle, bool flipX)
+	public virtual void SetRotation(float actualAngle, float lookAngle, bool facingRight)
 	{
-		IsFacingRight = !flipX;
+	    IsFacingRight = facingRight;
 
 		// Move gun
 		Vector3 localPos = transform.localPosition;
 		localPos.x = IsFacingRight ? Mathf.Abs(localPos.x) : -Mathf.Abs(localPos.x);
 		transform.localPosition = localPos;
 
-		transform.localEulerAngles = new Vector3(0, 0, IsFacingRight ? angle : angle - 180);
-		Sprite.flipX = flipX;
+		transform.localEulerAngles = new Vector3(0, 0, lookAngle);
+		Sprite.flipX = !IsFacingRight;
 
 		if (shootPoint) {
 			Vector3 position = GetShootPosition();

@@ -7,12 +7,14 @@
 	SubShader {
 		Tags 
 		{ 
-			"Queue"="Geometry"
+			"Queue"="Transparent"
 			"RenderType"="TransparentCutout"
 		}
 		LOD 200
 
 		Cull Off
+		ZTest Off
+		ZWrite Off
 
 		CGPROGRAM
 		// Lambert lighting model, and enable shadows on all light types
@@ -38,5 +40,5 @@
 		}
 		ENDCG
 	}
-	FallBack "Diffuse"
+	FallBack "Sprites/Default"
 }
