@@ -14,10 +14,6 @@ public class PlayerController : RingWalker {
 	[Header("Shooting")]
 	public Weapon weapon;
 
-	[Header("Health")]
-	public int health = 20;
-	public int maxHealth = 20;
-
 	[Header("Animations")]
 	public Animator animBody;
 	//public Animator animGun;
@@ -101,10 +97,11 @@ public class PlayerController : RingWalker {
 		return ((Input.mousePosition.xy() - Camera.main.WorldToScreenPoint(from).xy()).ToDegrees() + 360) % 360;
 	}
 
-	public void Damage(int damage)
+	public override void Damage(int damage)
 	{
-		health -= damage;
-		if (health <= 0) {
+		base.Damage(damage);
+
+		if (Dead) {
 			animBody.SetBool("Dead", true);
 
 			foreach (Collider col in GetComponentsInChildren<Collider>())

@@ -16,6 +16,11 @@ public abstract class RingWalker : RingObject
 	[Range(0, 1)]
 	public float groundedRadius = 0.25f;
 
+	[Header("Health")]
+	public int health = 20;
+	public int maxHealth = 20;
+	public bool Dead { get; private set; }
+
 	private Rigidbody m_Body;
 	public Rigidbody Body { get { return m_Body; } }
 
@@ -62,5 +67,11 @@ public abstract class RingWalker : RingObject
         facingRight = inAngle < 90 || inAngle > 270;
         outAngle = facingRight ? inAngle : inAngle - 180;
     }
+
+	public virtual void Damage(int damage)
+	{
+		health -= damage;
+		Dead = health <= 0;
+	}
 
 }

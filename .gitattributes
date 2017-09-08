@@ -15,3 +15,10 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+# Devlog gifs
+*.gif filter=lfs diff=lfs merge=lfs -text
+
+# Unity lightmap snapshots
+**/LightmapSnapshot.asset filter=lfs diff=lfs merge=lfs -text
+**/ReflectionProbe-*.exr filter=lfs diff=lfs merge=lfs -text

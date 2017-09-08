@@ -1,6 +1,7 @@
 ﻿using ExtensionMethods;
 using System.Collections;
 using System.Collections.Generic;
+using GameGUI;
 using UnityEngine;
 
 public class EnemyController : RingWalker {
@@ -16,10 +17,6 @@ public class EnemyController : RingWalker {
 	public Vector2 bulletDirection = Vector2.right;
 	public float bulletRange = 5;
 
-	[Header("Health")]
-	public int health = 20;
-	public int maxHealth = 20;
-
 	[Header("Animations")]
 	public Animator animBody;
 	public SpriteRenderer spriteBody;
@@ -28,6 +25,7 @@ public class EnemyController : RingWalker {
 
     private PlayerController player;
     private bool aimAtPlayer = true;
+	private Healthbar healthbar;
 
 	protected override void Awake()
 	{
@@ -150,10 +148,15 @@ public class EnemyController : RingWalker {
 		Gizmos.DrawWireSphere(transform.position, bulletRange);
 	}
 
-	public void Damage(int damage)
+	public override void Damage(int damage)
 	{
-		health -= damage;
-		if (health <= 0) {
+		base.Damage(damage);
+
+		if (healthbar == null)
+			healthbar = GameGUI.GameGUI.CreateHealthbar(this);
+		healthbar.UpdatePercentageFromWalker();
+
+		if (Dead) {
 			animBody.SetBool("Dead", true);
 
 			foreach (Collider col in GetComponentsInChildren<Collider>())
