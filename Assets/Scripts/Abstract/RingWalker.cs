@@ -6,7 +6,7 @@ using System;
 
 public abstract class RingWalker : RingObject
 {
-
+	[HideInInspector]
     public bool isFacingRight;
 	public bool Grounded { get; protected set; }
 
@@ -20,6 +20,7 @@ public abstract class RingWalker : RingObject
 	public int health = 20;
 	public int maxHealth = 20;
 	public bool Dead { get; private set; }
+	public float HealthPercentage { get { return maxHealth == 0 ? 0 : (float)health / maxHealth; } }
 
 	private Rigidbody m_Body;
 	public Rigidbody Body { get { return m_Body; } }

@@ -10,8 +10,8 @@ public abstract class Weapon : MonoBehaviour {
 	public Vector2 bulletOffset;
 	public Vector2 bulletDirection = Vector3.right;
 
-	public abstract void OnFireBegan();
-	public abstract void OnFireEnded();
+	public abstract void OnInputBegan();
+	public abstract void OnInputEnded();
 
 	protected SpriteRenderer Sprite { get; private set; }
 	protected Animator Anim { get; private set; }

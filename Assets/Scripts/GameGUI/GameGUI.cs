@@ -18,9 +18,12 @@ namespace GameGUI
 		public static Healthbar CreateHealthbar(RingWalker walker)
 		{
 			var clone = Instantiate(singleton.healthbarPrefab, singleton.transform);
-			Healthbar healthbar = clone.GetComponent<Healthbar>();
+
+			var healthbar = clone.GetComponent<Healthbar>();
 			healthbar.walker = walker;
-			healthbar.UpdatePercentageFromWalker();
+
+			var follow = clone.GetComponent<AnchoredFollow>();
+			follow.worldObject = walker.transform;
 
 			return healthbar;
 		}

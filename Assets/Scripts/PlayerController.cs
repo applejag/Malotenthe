@@ -50,7 +50,7 @@ public class PlayerController : RingWalker {
 		 *	MOVEMENT
 		*/
 
-		if (horiZero && Grounded) {
+		if (horiZero) {
 			// Try counteract the movement.
 			Body.AddForce(-Body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
 		} else {
@@ -83,10 +83,10 @@ public class PlayerController : RingWalker {
 		if (weapon) {
 			if (fireBegan) {
 				// Fire
-				weapon.OnFireBegan();
+				weapon.OnInputBegan();
 			}
 			if (fireEnded) {
-				weapon.OnFireEnded();
+				weapon.OnInputEnded();
 			}
 		}
 

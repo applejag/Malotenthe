@@ -154,7 +154,7 @@ public class EnemyController : RingWalker {
 
 		if (healthbar == null)
 			healthbar = GameGUI.GameGUI.CreateHealthbar(this);
-		healthbar.UpdatePercentageFromWalker();
+		healthbar.UpdateSliderFromWalkerHealth();
 
 		if (Dead) {
 			animBody.SetBool("Dead", true);

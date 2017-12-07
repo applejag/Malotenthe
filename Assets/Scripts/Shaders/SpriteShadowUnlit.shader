@@ -1,4 +1,4 @@
-﻿Shader "Sprites/Shadow" {
+﻿Shader "Sprites/Shadow Unlit" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		[PerRendererData]_MainTex ("Sprite Texture", 2D) = "white" {}
@@ -12,10 +12,11 @@
 		}
 		LOD 200
 
+		Lighting Off
 		Cull Off
 		ZTest Off
 		ZWrite Off
-
+		
 		CGPROGRAM
 		// Lambert lighting model, and enable shadows on all light types
 		#pragma surface surf Lambert addshadow fullforwardshadows

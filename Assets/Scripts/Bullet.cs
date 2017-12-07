@@ -15,11 +15,14 @@ public class Bullet : RingObject
 	public float selfDestruct = 5;
 	[Range(0,1)]
 	public float gravityScale = 1;
-
+	
 	private Vector3 gravity;
+	[SerializeField, HideInInspector]
+	private float startTime;
 
 	private void Start()
 	{
+		startTime = Time.time;
 		SelfDestruct(selfDestruct);
 	}
 
@@ -71,6 +74,9 @@ public class Bullet : RingObject
 		if (trail) {
 			trail.transform.SetParent(null);
 			trail.autodestruct = true;
+
+			float lived = Time.time - startTime;
+			trail.time = Mathf.Min(lived, trail.time);
 		}
 
 		Destroy(gameObject);
