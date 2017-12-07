@@ -15,15 +15,17 @@ public class e_GameGUI_AnchoredFollow : Editor
 	}
 
 	public override void OnInspectorGUI() {
-		DrawDefaultInspector();
 
-		GUI.enabled = script.worldObject && script.worldObject.gameObject.scene.IsValid();
+		DrawDefaultInspector();
 		
+		EditorGUILayout.Space();
+		GUI.enabled = false;
+		EditorGUILayout.Vector3Field("Used Position", script.usedPos);
+		GUI.enabled = true;
 		if (GUILayout.Button("Jump to target now"))
 		{
 			script.JumpToTarget();
 		}
-		GUI.enabled = true;
 	}
 
 }

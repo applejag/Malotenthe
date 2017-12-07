@@ -8,6 +8,9 @@ namespace GameGUI
 	public class AnchoredFollow : MonoBehaviour
 	{
 		public Transform worldObject;
+		public Vector3 worldPos;
+
+		public Vector3 usedPos { get { return worldObject ? worldObject.position : worldPos; } }
 
 		public bool followX = true;
 		public bool followY = true;
@@ -24,7 +27,7 @@ namespace GameGUI
 			var rectTransform = transform as RectTransform;
 			Debug.Assert(rectTransform != null, "rectTransform != null");
 
-			Vector2 pos = Camera.main.WorldToViewportPoint(worldObject.transform.position);
+			Vector2 pos = Camera.main.WorldToViewportPoint(usedPos);
 
 			rectTransform.anchorMin = FollowAnchor(pos, rectTransform.anchorMin);
 			rectTransform.anchorMax = FollowAnchor(pos, rectTransform.anchorMax);

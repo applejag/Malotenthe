@@ -19,7 +19,7 @@
 		
 		CGPROGRAM
 		// Lambert lighting model, and enable shadows on all light types
-		#pragma surface surf Lambert addshadow fullforwardshadows
+		#pragma surface surf NoLighting addshadow fullforwardshadows
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
@@ -38,6 +38,14 @@
 			o.Albedo = c.rgb;
 			o.Alpha = c.a;
 			clip(o.Alpha - _Cutoff);
+		}
+		
+		fixed4 LightingNoLighting(SurfaceOutput s, fixed3 lightDir, fixed atten)
+		{
+			fixed4 c;
+			c.rgb = s.Albedo;
+			c.a = s.Alpha;
+			return c;
 		}
 		ENDCG
 	}

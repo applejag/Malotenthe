@@ -8,8 +8,7 @@ namespace GameGUI
 	[RequireComponent(typeof(SlowSlider))]
 	public class Reloadbar : MonoBehaviour
 	{
-		[SerializeField, HideInInspector]
-		private SlowSlider slider;
+		[SerializeField, HideInInspector] private SlowSlider slider;
 
 		public Image blinkImage;
 		public float blinkTime = 0.2f;

@@ -10,6 +10,8 @@ public class PlayerController : RingWalker {
 	public float velocityDeacceleration = 300;
 	public float velocityTerminal = 8;
 	public float velocityJump = 15;
+	public bool snappyInput = true;
+	public bool snappyMovement = true;
 
 	[Header("Shooting")]
 	public Weapon weapon;
@@ -32,7 +34,7 @@ public class PlayerController : RingWalker {
 		 *	READ INPUT
 		*/
 
-		float horizontal = Input.GetAxis("Horizontal");
+		float horizontal = snappyInput ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
 		bool horiZero = Mathf.Approximately(horizontal, 0);
 		bool jump = Input.GetButtonDown("Jump");
 
@@ -50,13 +52,23 @@ public class PlayerController : RingWalker {
 		 *	MOVEMENT
 		*/
 
-		if (horiZero) {
-			// Try counteract the movement.
-			Body.AddForce(-Body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
-		} else {
-			Body.AddForce(transform.right * horizontal * velocityAcceleration * Time.deltaTime);
+		if (snappyMovement)
+		{
+			Body.velocity = (transform.right.xz() * horizontal * velocityTerminal).x_y(Body.velocity.y);
+		}
+		else
+		{ 
+			if (horiZero)
+			{
+				// Try counteract the movement.
+				Body.AddForce(-Body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
+			}
+			else
+			{
+				Body.AddForce(transform.right * horizontal * velocityAcceleration * Time.deltaTime);
 
-			Body.velocity = Vector2.ClampMagnitude(Body.velocity.xz(), velocityTerminal).x_y(Body.velocity.y);
+				Body.velocity = Vector2.ClampMagnitude(Body.velocity.xz(), velocityTerminal).x_y(Body.velocity.y);
+			}
 		}
 
 		if (jump && Grounded) {
