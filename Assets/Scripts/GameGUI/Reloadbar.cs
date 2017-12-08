@@ -10,6 +10,8 @@ namespace GameGUI
 	{
 		[SerializeField, HideInInspector] private SlowSlider slider;
 
+		public Weapon weapon;
+
 		public Image blinkImage;
 		public float blinkTime = 0.2f;
 
@@ -18,6 +20,37 @@ namespace GameGUI
 		private void Awake()
 		{
 			slider = GetComponent<SlowSlider>();
+		}
+
+		private void OnEnable()
+		{
+			if (weapon == null) return;
+			weapon.WeaponFired += OnWeaponFired;
+			weapon.WeaponReloaded += OnWeaponReloaded;
+			weapon.WeaponReloading += OnWeaponReloading;
+		}
+
+		private void OnDisable()
+		{
+			if (weapon == null) return;
+			weapon.WeaponFired -= OnWeaponFired;
+			weapon.WeaponReloaded -= OnWeaponReloaded;
+			weapon.WeaponReloading -= OnWeaponReloading;
+		}
+
+		private void OnWeaponFired(Weapon source)
+		{
+			Blink();
+		}
+
+		private void OnWeaponReloading(Weapon source, float reloadTime)
+		{
+			Reloading(reloadTime);
+		}
+
+		private void OnWeaponReloaded(Weapon source)
+		{
+			Reloaded();
 		}
 
 		public void Reloading(float reloadTime)

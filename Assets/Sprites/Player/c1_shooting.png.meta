@@ -1,11 +1,14 @@
 fileFormatVersion: 2
-guid: f491c7cc7b9a49e4aa7d06710a998559
-timeCreated: 1503683977
+guid: 92cda6a7a3fc39e44941f5664a3377e5
+timeCreated: 1512743628
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: idle_sprite.main_0
-    21300002: idle_sprite.main_1
+    21300000: c1_shooting_0
+    21300002: c1_shooting_1
+    21300004: c1_shooting_2
+    21300006: c1_shooting_3
+    21300008: c1_shooting_4
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -107,29 +110,71 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: idle_sprite.main_0
+      name: c1_shooting_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 45
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.0625}
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: idle_sprite.main_1
+      name: c1_shooting_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 45
         y: 0
-        width: 32
-        height: 32
+        width: 45
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.0625}
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_shooting_2
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_shooting_3
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_shooting_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

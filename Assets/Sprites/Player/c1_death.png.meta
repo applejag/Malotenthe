@@ -1,12 +1,16 @@
 fileFormatVersion: 2
-guid: fed569c30b7050945a59f3b8a2d496a3
-timeCreated: 1512744341
+guid: 92fa4d32f36504e459f938c4d19961a7
+timeCreated: 1512743684
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: mussleflash_sprite_0
-    21300002: mussleflash_sprite_1
-    21300004: mussleflash_sprite_2
+    21300000: c1_death_0
+    21300002: c1_death_1
+    21300004: c1_death_2
+    21300006: c1_death_3
+    21300008: c1_death_4
+    21300010: c1_death_5
+    21300012: c1_death_6
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -108,43 +112,99 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: mussleflash_sprite_0
+      name: c1_death_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 45
+        height: 45
       alignment: 9
-      pivot: {x: 0.59375, y: 0.515625}
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: mussleflash_sprite_1
+      name: c1_death_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 45
         y: 0
-        width: 32
-        height: 32
+        width: 45
+        height: 45
       alignment: 9
-      pivot: {x: 0.59375, y: 0.515625}
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: mussleflash_sprite_2
+      name: c1_death_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 90
         y: 0
-        width: 32
-        height: 32
+        width: 45
+        height: 45
       alignment: 9
-      pivot: {x: 0.59375, y: 0.515625}
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_death_3
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_death_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_death_5
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_death_6
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

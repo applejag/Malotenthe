@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using GameGUI;
 using UnityEngine;
 
-public class WeaponsBurst : Weapon
+public sealed class WeaponsBurst : Weapon
 {
 	public GameObject bulletPrefab;
-	public Reloadbar reloadbar;
 
 	[Header("Burst settings")]
 	public float bulletsPerSecond = 10;
@@ -27,28 +26,20 @@ public class WeaponsBurst : Weapon
 		// Do nofin
 	}
 
-	void SpawnBullet()
-	{
-		Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
-
-		Anim.SetTrigger("Shoot");
-	}
-
 	IEnumerator ShootBurst()
 	{
 		isFiring = true;
 
 		for (int i = 0; i < bulletsPerBurst; i++) {
-			SpawnBullet();
-			if (reloadbar) reloadbar.Blink();
+			SpawnBullet(bulletPrefab);
 			yield return new WaitForSeconds(1 / bulletsPerSecond);
 		}
 
-		if (reloadbar) reloadbar.Reloading(reloadTime);
+		OnWeaponReloading(reloadTime);
 
 		yield return new WaitForSeconds(reloadTime);
 		isFiring = false;
 
-		if (reloadbar) reloadbar.Reloaded();
+		OnWeaponReloaded();
 	}
 }

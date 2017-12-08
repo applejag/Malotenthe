@@ -136,7 +136,8 @@ public class EnemyController : RingWalker {
     }
 
     protected override void OnDrawGizmosSelected()
-	{
+    {
+	    if (!enabled) return;
 		base.OnDrawGizmosSelected();
 
 		Gizmos.color = Color.red;
@@ -173,19 +174,34 @@ public class EnemyController : RingWalker {
     protected Vector3 GetShootPosition()
     {
 #if UNITY_EDITOR
-        if (UnityEditor.EditorApplication.isPlaying == false) return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
+        if (UnityEditor.EditorApplication.isPlaying == false)
+			return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
 #endif
-        if (isFacingRight) return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
-        else return RingPosition(spriteHead.transform.TransformPoint(bulletOffset.FlipX()));
+        if (isFacingRight)
+			return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
+        else
+			return RingPosition(spriteHead.transform.TransformPoint(bulletOffset.FlipX()));
     }
 
     protected Vector3 GetShootDirection(Vector3 position)
     {
 #if UNITY_EDITOR
-        if (UnityEditor.EditorApplication.isPlaying == false) return RingProjectDirection(position, spriteHead.transform.TransformDirection(bulletDirection)).normalized;
+        if (UnityEditor.EditorApplication.isPlaying == false)
+        {
+	        Vector3 direction = spriteHead.transform.TransformDirection(bulletDirection);
+	        return RingProjectDirection(position, direction).normalized;
+        }
 #endif
-        if (isFacingRight) return RingProjectDirection(position, spriteHead.transform.TransformDirection(bulletDirection)).normalized;
-        else return RingProjectDirection(position, spriteHead.transform.TransformDirection(bulletDirection.FlipX())).normalized;
+        if (isFacingRight)
+        {
+	        Vector3 direction = spriteHead.transform.TransformDirection(bulletDirection);
+	        return RingProjectDirection(position, direction).normalized;
+        }
+        else
+        {
+	        Vector3 direction = spriteHead.transform.TransformDirection(bulletDirection.FlipX());
+	        return RingProjectDirection(position, direction).normalized;
+        }
     }
 
 }

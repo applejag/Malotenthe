@@ -1,9 +1,10 @@
-﻿using ExtensionMethods;
+﻿using System;
+using ExtensionMethods;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : RingWalker {
+public sealed class PlayerController : RingWalker {
 
 	[Header("Movement")]
 	public float velocityAcceleration = 600;
@@ -18,14 +19,35 @@ public class PlayerController : RingWalker {
 
 	[Header("Animations")]
 	public Animator animBody;
-	//public Animator animGun;
 	public SpriteRenderer spriteBody;
-	//public SpriteRenderer spriteGun;
+
+	[SerializeField, HideInInspector]
+	private bool initialSpriteFlip;
 
 	protected override void Awake() {
 		base.Awake();
 		
 		isFacingRight = true;
+	}
+
+	private void Start()
+	{
+		initialSpriteFlip = spriteBody.flipX;
+	}
+
+	private void OnEnable()
+	{
+		weapon.WeaponFired += OnWeaponFired;
+	}
+
+	private void OnDisable()
+	{
+		weapon.WeaponFired -= OnWeaponFired;
+	}
+
+	private void OnWeaponFired(Weapon source)
+	{
+		animBody.SetTrigger("Shoot");
 	}
 
 	private void Update() {
@@ -40,17 +62,15 @@ public class PlayerController : RingWalker {
 
 		bool fireBegan = Input.GetButtonDown("Fire1");
 		bool fireEnded = Input.GetButtonUp("Fire1");
-
-		float angleTowardsMouse = AngleTowardsMouse(weapon.transform.position);
-		// - => right, + => left
-	    float weaponAngle;
-        CalculateRotation(angleTowardsMouse, out weaponAngle, out isFacingRight);
-
-		bool runningBackwards = (horizontal > 0 && !isFacingRight) || (horizontal < 0 && isFacingRight);
-
+		
 		/**
 		 *	MOVEMENT
 		*/
+
+		if (!horiZero)
+		{
+			isFacingRight = horizontal > 0;
+		}
 
 		if (snappyMovement)
 		{
@@ -80,13 +100,14 @@ public class PlayerController : RingWalker {
 		*/
 
 		// Update animators
-		animBody.SetFloat("Speed", Body.velocity.xz().magnitude * (runningBackwards ? -1 : 1));
+		animBody.SetFloat("Speed", Body.velocity.xz().magnitude);
 		animBody.SetBool("Moving", !horiZero);
 		animBody.SetBool("Grounded", Grounded);
 
 		// Rotate gun
-		weapon.SetRotation(angleTowardsMouse, weaponAngle, isFacingRight);
-		spriteBody.flipX = !isFacingRight;
+		float weaponAngle = isFacingRight ? 0 : 180;
+		weapon.SetRotation(weaponAngle, isFacingRight);
+		spriteBody.flipX = !isFacingRight ^ initialSpriteFlip;
 
 		/**
 		 *	SHOOTING
@@ -104,10 +125,10 @@ public class PlayerController : RingWalker {
 
 	}
 
-	float AngleTowardsMouse(Vector3 from)
-	{
-		return ((Input.mousePosition.xy() - Camera.main.WorldToScreenPoint(from).xy()).ToDegrees() + 360) % 360;
-	}
+	//private static float AngleTowardsMouse(Vector3 from)
+	//{
+	//	return ((Input.mousePosition.xy() - Camera.main.WorldToScreenPoint(from).xy()).ToDegrees() + 360) % 360;
+	//}
 
 	public override void Damage(int damage)
 	{

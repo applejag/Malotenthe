@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 3749ed532b2f74e48903632684ed29d2
-timeCreated: 1503683943
+guid: 05ba7aab245f08c4f9f20ab98e6a885a
+timeCreated: 1512743664
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: walking_spritemain_0
-    21300002: walking_spritemain_1
-    21300004: walking_spritemain_2
-    21300006: walking_spritemain_3
+    21300000: c1_jump_0
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -47,8 +44,8 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.17777778}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 10
   alphaUsage: 1
@@ -109,57 +106,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: walking_spritemain_0
+      name: c1_jump_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 45
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.09375}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: walking_spritemain_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.09375}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: walking_spritemain_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.09375}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: walking_spritemain_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.09375}
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

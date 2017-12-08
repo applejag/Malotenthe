@@ -3,27 +3,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public abstract class Weapon : MonoBehaviour {
 
 	public Transform shootPoint;
-	public Vector2 bulletOffset;
 	public Vector2 bulletDirection = Vector3.right;
 
 	public abstract void OnInputBegan();
 	public abstract void OnInputEnded();
 
-	protected SpriteRenderer Sprite { get; private set; }
-	protected Animator Anim { get; private set; }
+	public Animator Anim { get; private set; }
 	protected bool IsFacingRight { get; private set; }
+
+	public event WeaponEvent WeaponFired;
+	public event WeaponReloadEvent WeaponReloading;
+	public event WeaponEvent WeaponReloaded;
+
+	public delegate void WeaponEvent(Weapon source);
+	public delegate void WeaponReloadEvent(Weapon source, float reloadTime);
+
+	protected void OnWeaponFired()
+	{
+		if (WeaponFired != null) WeaponFired(this);
+	}
+
+	protected void OnWeaponReloading(float reloadTime)
+	{
+		if (WeaponReloading != null) WeaponReloading(this, reloadTime);
+	}
+
+	protected void OnWeaponReloaded()
+	{
+		if (WeaponReloaded != null) WeaponReloaded(this);
+	}
 
 	protected virtual void Awake()
 	{
-		Sprite = GetComponent<SpriteRenderer>();
 		Anim = GetComponent<Animator>();
 	}
 
-	public virtual void SetRotation(float actualAngle, float lookAngle, bool facingRight)
+	public void SpawnBullet(GameObject prefab)
+	{
+		Vector3 position = GetShootPosition();
+		Vector3 direction = GetShootDirection(position);
+		Quaternion rotation = Quaternion.LookRotation(direction);
+
+		Instantiate(prefab, position, rotation);
+
+		Anim.SetTrigger("Shoot");
+
+		OnWeaponFired();
+	}
+
+	public virtual void SetRotation(float lookAngle, bool facingRight)
 	{
 	    IsFacingRight = facingRight;
 
@@ -33,9 +64,8 @@ public abstract class Weapon : MonoBehaviour {
 		transform.localPosition = localPos;
 
 		transform.localEulerAngles = new Vector3(0, 0, lookAngle);
-		Sprite.flipX = !IsFacingRight;
 
-		if (shootPoint) {
+		if (shootPoint && shootPoint != transform) {
 			Vector3 position = GetShootPosition();
 			Vector3 direction = GetShootDirection(position);
 			Quaternion rotation = Quaternion.LookRotation(direction);
@@ -45,40 +75,30 @@ public abstract class Weapon : MonoBehaviour {
 		}
 	}
 
-	protected virtual void OnEnable()
-	{
-		Sprite.enabled = true;
-	}
-
-	protected virtual void OnDisable()
-	{
-		Sprite.enabled = false;
-	}
-
 	protected Vector3 GetShootPosition()
 	{
-#if UNITY_EDITOR
-		if (UnityEditor.EditorApplication.isPlaying == false) return RingObject.RingPosition(transform.TransformPoint(bulletOffset));
-#endif
-		if (IsFacingRight) return RingObject.RingPosition(transform.TransformPoint(bulletOffset));
-		else return RingObject.RingPosition(transform.TransformPoint(bulletOffset.FlipX()));
+		return shootPoint ? shootPoint.position : transform.position;
 	}
 
 	protected Vector3 GetShootDirection(Vector3 position)
 	{
-#if UNITY_EDITOR
-		if (UnityEditor.EditorApplication.isPlaying == false) return RingObject.RingProjectDirection(position, transform.TransformDirection(bulletDirection)).normalized;
-#endif
-		if (IsFacingRight) return RingObject.RingProjectDirection(position, transform.TransformDirection(bulletDirection)).normalized;
-		else return RingObject.RingProjectDirection(position, transform.TransformDirection(bulletDirection.FlipX())).normalized;
+		Vector3 direction = transform.TransformDirection(bulletDirection);
+		return RingObject.RingProjectDirection(position, direction).normalized;
 	}
 
+#if UNITY_EDITOR
 	protected virtual void OnDrawGizmosSelected()
 	{
 		Gizmos.color = Color.red;
 		Vector3 position = GetShootPosition();
 		Vector3 direction = GetShootDirection(position);
 		Gizmos.DrawRay(position, direction);
+		Gizmos.DrawWireSphere(position+direction, 0.05f);
+		Gizmos.color = new Color(1,0,0,0.5f);
+		Gizmos.DrawSphere(position, 0.05f);
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(position, 0.05f);
 	}
+#endif
 
 }
