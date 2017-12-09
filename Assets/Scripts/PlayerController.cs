@@ -7,12 +7,10 @@ using UnityEngine;
 public sealed class PlayerController : RingWalker {
 
 	[Header("Movement")]
-	public float velocityAcceleration = 600;
-	public float velocityDeacceleration = 300;
 	public float velocityTerminal = 8;
 	public float velocityJump = 15;
-	public bool snappyInput = true;
-	public bool snappyMovement = true;
+	[Range(0,1)]
+	public float velocityShootingPenalty = 0.5f;
 
 	[Header("Shooting")]
 	public Weapon weapon;
@@ -47,7 +45,8 @@ public sealed class PlayerController : RingWalker {
 
 	private void OnWeaponFired(Weapon source)
 	{
-		animBody.SetTrigger("Shoot");
+		if (Grounded)
+			animBody.SetTrigger("Shoot");
 	}
 
 	private void Update() {
@@ -56,7 +55,7 @@ public sealed class PlayerController : RingWalker {
 		 *	READ INPUT
 		*/
 
-		float horizontal = snappyInput ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
+		float horizontal = Input.GetAxisRaw("Horizontal");
 		bool horiZero = Mathf.Approximately(horizontal, 0);
 		bool jump = Input.GetButtonDown("Jump");
 
@@ -67,29 +66,17 @@ public sealed class PlayerController : RingWalker {
 		 *	MOVEMENT
 		*/
 
-		if (!horiZero)
+		if (weapon.IsShooting)
+		{
+			horizontal *= velocityShootingPenalty;
+		}
+
+		if (!horiZero && !weapon.IsShooting)
 		{
 			isFacingRight = horizontal > 0;
 		}
 
-		if (snappyMovement)
-		{
-			Body.velocity = (transform.right.xz() * horizontal * velocityTerminal).x_y(Body.velocity.y);
-		}
-		else
-		{ 
-			if (horiZero)
-			{
-				// Try counteract the movement.
-				Body.AddForce(-Body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
-			}
-			else
-			{
-				Body.AddForce(transform.right * horizontal * velocityAcceleration * Time.deltaTime);
-
-				Body.velocity = Vector2.ClampMagnitude(Body.velocity.xz(), velocityTerminal).x_y(Body.velocity.y);
-			}
-		}
+		Body.velocity = (transform.right.xz() * horizontal * velocityTerminal).x_y(Body.velocity.y);
 
 		if (jump && Grounded) {
 			Body.velocity = Body.velocity.SetY(velocityJump);
@@ -124,25 +111,15 @@ public sealed class PlayerController : RingWalker {
 		}
 
 	}
-
-	//private static float AngleTowardsMouse(Vector3 from)
-	//{
-	//	return ((Input.mousePosition.xy() - Camera.main.WorldToScreenPoint(from).xy()).ToDegrees() + 360) % 360;
-	//}
-
+	
 	public override void Damage(int damage)
 	{
 		base.Damage(damage);
 
-		if (Dead) {
+		if (IsDead) {
 			animBody.SetBool("Dead", true);
-
-			foreach (Collider col in GetComponentsInChildren<Collider>())
-				col.enabled = false;
-
-			Body.isKinematic = true;
+			
 			this.enabled = false;
-
 		} else
 			animBody.SetTrigger("Hit");
 	}

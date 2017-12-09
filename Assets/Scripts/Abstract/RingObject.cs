@@ -28,6 +28,8 @@ public abstract class RingObject : MonoBehaviour
 	/// </summary>
 	public static Vector3 RingPosition(Vector3 position)
 	{
+		if (position.xz() == Vector2.zero)
+			return new Vector3(0, position.y, -RingData.Radius);
 		return (position.xz().normalized * RingData.Radius).x_y(_: position.y);
 	}
 
@@ -36,6 +38,8 @@ public abstract class RingObject : MonoBehaviour
 	/// </summary>
 	public static Vector3 RingPosition(Vector3 position, float radius)
 	{
+		if (position.xz() == Vector2.zero)
+			return new Vector3(0, position.y, -radius);
 		return (position.xz().normalized * radius).x_y(_: position.y);
 	}
 
@@ -44,6 +48,8 @@ public abstract class RingObject : MonoBehaviour
 	/// </summary>
 	public static Quaternion RingRotation(Vector3 position)
 	{
+		if (position.xz() == Vector2.zero)
+			return Quaternion.identity;
 		return Quaternion.LookRotation(-position.SetY(0));
 	}
 

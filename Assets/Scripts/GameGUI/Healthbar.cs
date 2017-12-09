@@ -40,7 +40,7 @@ namespace GameGUI
 
 			UpdateSliderFromWalkerHealth();
 
-			if (walker.Dead && destroyAtDeathDelay >= 0)
+			if (walker.IsDead && destroyAtDeathDelay >= 0)
 			{
 				dyingTime += Time.deltaTime;
 				if (dyingTime >= destroyAtDeathDelay)

@@ -11,14 +11,10 @@ public sealed class WeaponsBurst : Weapon
 	[Header("Burst settings")]
 	public float bulletsPerSecond = 10;
 	public int bulletsPerBurst = 3;
-	public float reloadTime;
-
-	private bool isFiring;
 
 	public override void OnInputBegan()
 	{
-		if (isFiring == false)
-			StartCoroutine(ShootBurst());
+		TryStartShootCycleCoroutine();
 	}
 
 	public override void OnInputEnded()
@@ -26,20 +22,11 @@ public sealed class WeaponsBurst : Weapon
 		// Do nofin
 	}
 
-	IEnumerator ShootBurst()
+	public override IEnumerator ShootCoroutine()
 	{
-		isFiring = true;
-
 		for (int i = 0; i < bulletsPerBurst; i++) {
 			SpawnBullet(bulletPrefab);
 			yield return new WaitForSeconds(1 / bulletsPerSecond);
 		}
-
-		OnWeaponReloading(reloadTime);
-
-		yield return new WaitForSeconds(reloadTime);
-		isFiring = false;
-
-		OnWeaponReloaded();
 	}
 }

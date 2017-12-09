@@ -5,13 +5,20 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour {
 
+	public Animator gunAnim;
 	public Transform shootPoint;
 	public Vector2 bulletDirection = Vector3.right;
 
 	public abstract void OnInputBegan();
 	public abstract void OnInputEnded();
+	public abstract IEnumerator ShootCoroutine();
+	public float reloadTime = 2;
 
-	public Animator Anim { get; private set; }
+	private Coroutine currentCoroutine;
+
+	public bool IsShooting { get; private set; }
+	public bool IsReloading { get; private set; }
+	public bool CanShoot { get { return !IsReloading && !IsShooting; } }
 	protected bool IsFacingRight { get; private set; }
 
 	public event WeaponEvent WeaponFired;
@@ -21,26 +28,6 @@ public abstract class Weapon : MonoBehaviour {
 	public delegate void WeaponEvent(Weapon source);
 	public delegate void WeaponReloadEvent(Weapon source, float reloadTime);
 
-	protected void OnWeaponFired()
-	{
-		if (WeaponFired != null) WeaponFired(this);
-	}
-
-	protected void OnWeaponReloading(float reloadTime)
-	{
-		if (WeaponReloading != null) WeaponReloading(this, reloadTime);
-	}
-
-	protected void OnWeaponReloaded()
-	{
-		if (WeaponReloaded != null) WeaponReloaded(this);
-	}
-
-	protected virtual void Awake()
-	{
-		Anim = GetComponent<Animator>();
-	}
-
 	public void SpawnBullet(GameObject prefab)
 	{
 		Vector3 position = GetShootPosition();
@@ -49,9 +36,27 @@ public abstract class Weapon : MonoBehaviour {
 
 		Instantiate(prefab, position, rotation);
 
-		Anim.SetTrigger("Shoot");
+		gunAnim.SetTrigger("Shoot");
 
-		OnWeaponFired();
+		if (WeaponFired != null) WeaponFired(this);
+	}
+
+	public void TryStartShootCycleCoroutine()
+	{
+		if (CanShoot)
+			StartCoroutine(FullShootCycleCoroutine());
+	}
+
+	private IEnumerator FullShootCycleCoroutine()
+	{
+		IsShooting = true;
+		yield return StartCoroutine(ShootCoroutine());
+		IsShooting = false;
+		IsReloading = true;
+		if (WeaponReloading != null) WeaponReloading(this, reloadTime);
+		yield return new WaitForSeconds(reloadTime);
+		IsReloading = false;
+		if (WeaponReloaded != null) WeaponReloaded(this);
 	}
 
 	public virtual void SetRotation(float lookAngle, bool facingRight)
@@ -67,11 +72,8 @@ public abstract class Weapon : MonoBehaviour {
 
 		if (shootPoint && shootPoint != transform) {
 			Vector3 position = GetShootPosition();
-			Vector3 direction = GetShootDirection(position);
-			Quaternion rotation = Quaternion.LookRotation(direction);
 
 			shootPoint.position = position;
-			shootPoint.rotation = rotation;
 		}
 	}
 

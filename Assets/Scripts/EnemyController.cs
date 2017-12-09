@@ -40,7 +40,11 @@ public class EnemyController : RingWalker {
 		 *	READ INPUT
 		*/
 
-		float horizontal = player != null ? (Mathf.DeltaAngle(RingDegrees(transform.position), RingDegrees(player.transform.position)) < 0 ? -1 : 1) : 0;
+		float horizontal = (player && !player.IsDead)
+			? (Mathf.DeltaAngle(RingDegrees(transform.position), RingDegrees(player.transform.position)) < 0
+				? -1
+				: 1)
+			: 0;
 		bool horiZero = Mathf.Approximately(horizontal, 0);
 		isFacingRight = horizontal > 0;
 
@@ -96,7 +100,7 @@ public class EnemyController : RingWalker {
 
     float AngleTowardsPlayer()
     {
-        if (!player) return 0;
+        if (!player || player.IsDead) return 0;
         Vector3 direction = transform.InverseTransformDirection(player.transform.position - transform.position);
         return (direction.xy().ToDegrees() + 360) % 360;
     }
@@ -106,7 +110,7 @@ public class EnemyController : RingWalker {
 #if UNITY_EDITOR
 		player = player ?? FindObjectOfType<PlayerController>();
 #endif
-		if (!player) return false;
+		if (!player || player.IsDead) return false;
 
 		Vector3 playerPos = player.transform.position;
 		float dist = Vector3.Distance(playerPos, transform.position);
@@ -157,7 +161,7 @@ public class EnemyController : RingWalker {
 			healthbar = GameGUI.GameGUI.CreateHealthbar(this);
 		healthbar.UpdateSliderFromWalkerHealth();
 
-		if (Dead) {
+		if (IsDead) {
 			animBody.SetBool("Dead", true);
 
 			foreach (Collider col in GetComponentsInChildren<Collider>())

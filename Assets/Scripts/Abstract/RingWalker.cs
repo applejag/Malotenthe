@@ -19,7 +19,7 @@ public abstract class RingWalker : RingObject
 	[Header("Health")]
 	public int health = 20;
 	public int maxHealth = 20;
-	public bool Dead { get; private set; }
+	public bool IsDead { get; private set; }
 	public float HealthPercentage { get { return maxHealth == 0 ? 0 : (float)health / maxHealth; } }
 
 	[Header("Misc.")]
@@ -27,11 +27,10 @@ public abstract class RingWalker : RingObject
 	private Vector2 m_headOffset = Vector2.up * 2;
 	public Vector3 HeadPosition { get { return transform.TransformPoint(m_headOffset); } }
 
-	private Rigidbody m_Body;
-	public Rigidbody Body { get { return m_Body; } }
+	public Rigidbody Body { get; private set; }
 
 	protected virtual void Awake() {
-		m_Body = GetComponent<Rigidbody>();
+		Body = GetComponent<Rigidbody>();
 	}
 
 	/// <summary>
@@ -52,8 +51,8 @@ public abstract class RingWalker : RingObject
 		Gizmos.color = IsGrounded() ? Color.red : Color.cyan;
 		Gizmos.DrawWireSphere(transform.TransformPoint(groundedOffset), groundedRadius);
 
-		var pos = transform.position;
-		var head = HeadPosition;
+		Vector3 pos = transform.position;
+		Vector3 head = HeadPosition;
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawLine(pos, pos.SetY(head.y));
 		Gizmos.DrawLine(pos.SetY(head.y), head);
@@ -83,8 +82,9 @@ public abstract class RingWalker : RingObject
 
 	public virtual void Damage(int damage)
 	{
+		if (IsDead) return;
 		health -= damage;
-		Dead = health <= 0;
+		IsDead = health <= 0;
 		GameGUI.GameGUI.CreateDamagePopup(HeadPosition, damage);
 	}
 
