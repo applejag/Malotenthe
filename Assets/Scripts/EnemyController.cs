@@ -6,11 +6,6 @@ using UnityEngine;
 
 public class EnemyController : RingWalker {
 
-	[Header("Movement")]
-	public float velocityAcceleration = 600;
-	public float velocityDeacceleration = 300;
-	public float velocityTerminal = 8;
-
 	[Header("Shooting")]
 	public GameObject bulletPrefab;
 	public Vector2 bulletOffset;
@@ -18,13 +13,12 @@ public class EnemyController : RingWalker {
 	public float bulletRange = 5;
 
 	[Header("Animations")]
-	public Animator animBody;
-	public SpriteRenderer spriteBody;
 	public SpriteRenderer spriteHead;
 	public SpriteRenderer spriteBackleg;
+	public Transform HeadTransform { get { return spriteHead ? spriteHead.transform : (spriteBody ? spriteBody.transform : transform); } }
 
     private PlayerController player;
-    private bool aimAtPlayer = true;
+    private bool aimAtPlayer;
 	private Healthbar healthbar;
 
 	protected override void Awake()
@@ -45,15 +39,15 @@ public class EnemyController : RingWalker {
 				? -1
 				: 1)
 			: 0;
-		bool horiZero = Mathf.Approximately(horizontal, 0);
-		isFacingRight = horizontal > 0;
 
 		AnimatorStateInfo animState = animBody.GetCurrentAnimatorStateInfo(0);
 		bool isFiring = animState.IsTag("Shooting");
 		bool isMoving = animState.IsTag("Moving");
 		bool inRange = isFiring == false && PlayerInRange();
+		bool playerAlive = player && !player.IsDead;
+		bool shouldMove = !inRange && playerAlive;
 
-	    float angleTowardsPlayer = AngleTowardsPlayer();
+		float angleTowardsPlayer = AngleTowardsPlayer();
 	    bool playerRightFromMe;
         CalculateRotation(angleTowardsPlayer, out angleTowardsPlayer, out playerRightFromMe);
 
@@ -61,41 +55,34 @@ public class EnemyController : RingWalker {
 		 *	MOVEMENT
 		*/
 
-		if (Grounded) {
-			if (!isMoving) {
-				// Try counteract the movement.
-				Body.AddForce(-Body.velocity.SetY(0) * Time.deltaTime * velocityDeacceleration);
-			} else {
-				Body.AddForce(transform.right * horizontal * velocityAcceleration * Time.deltaTime);
-
-				Body.velocity = Vector2.ClampMagnitude(Body.velocity.xz(), velocityTerminal).x_y(Body.velocity.y);
-			}
-		}
+		if (isMoving)
+			isFacingRight = horizontal > 0;
 
 		/**
 		 *	VISUAL UPDATE
 		*/
-
-		animBody.SetFloat("Speed", Body.velocity.xz().magnitude);
-		animBody.SetBool("Moving", !horiZero);
-		animBody.SetBool("Grounded", Grounded);
+		
 		animBody.SetBool("In Range", inRange);
 
 	    if (isFiring)
 	    {
-            if (aimAtPlayer)
-    	        spriteHead.transform.localEulerAngles = new Vector3(0, 0, angleTowardsPlayer);
-	        spriteHead.flipX = 
-            spriteBody.flipX = 
-	        spriteBackleg.flipX = !playerRightFromMe;
+		    if (spriteHead && aimAtPlayer)
+				spriteHead.transform.localEulerAngles = new Vector3(0, 0, angleTowardsPlayer);
+
+		    isFacingRight = playerRightFromMe;
 	    }
-        else if (!horiZero)
-	    {
-	        aimAtPlayer = true;
-		    spriteBackleg.flipX =
-            spriteHead.flipX =
-            spriteBody.flipX = !isFacingRight;
-		}
+
+		if (spriteBackleg)
+			spriteBackleg.flipX = !isFacingRight ^ initialSpriteFlip;
+
+		if (spriteHead)
+			spriteHead.flipX = !isFacingRight ^ initialSpriteFlip;
+
+		/** 
+		 * Update from parent class
+		*/
+
+		ParentUpdate(shouldMove, isMoving, horizontal);
 	}
 
     float AngleTowardsPlayer()
@@ -179,12 +166,12 @@ public class EnemyController : RingWalker {
     {
 #if UNITY_EDITOR
         if (UnityEditor.EditorApplication.isPlaying == false)
-			return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
+			return RingPosition(HeadTransform.TransformPoint(bulletOffset));
 #endif
         if (isFacingRight)
-			return RingPosition(spriteHead.transform.TransformPoint(bulletOffset));
+			return RingPosition(HeadTransform.TransformPoint(bulletOffset));
         else
-			return RingPosition(spriteHead.transform.TransformPoint(bulletOffset.FlipX()));
+			return RingPosition(HeadTransform.TransformPoint(bulletOffset.FlipX()));
     }
 
     protected Vector3 GetShootDirection(Vector3 position)
@@ -192,18 +179,18 @@ public class EnemyController : RingWalker {
 #if UNITY_EDITOR
         if (UnityEditor.EditorApplication.isPlaying == false)
         {
-	        Vector3 direction = spriteHead.transform.TransformDirection(bulletDirection);
+	        Vector3 direction = HeadTransform.TransformDirection(bulletDirection);
 	        return RingProjectDirection(position, direction).normalized;
         }
 #endif
         if (isFacingRight)
         {
-	        Vector3 direction = spriteHead.transform.TransformDirection(bulletDirection);
+	        Vector3 direction = HeadTransform.TransformDirection(bulletDirection);
 	        return RingProjectDirection(position, direction).normalized;
         }
         else
         {
-	        Vector3 direction = spriteHead.transform.TransformDirection(bulletDirection.FlipX());
+	        Vector3 direction = HeadTransform.TransformDirection(bulletDirection.FlipX());
 	        return RingProjectDirection(position, direction).normalized;
         }
     }

@@ -1,10 +1,15 @@
 fileFormatVersion: 2
-guid: 0b04e89d53a691242a46e5f272fba342
-timeCreated: 1512857891
+guid: fa04485d807e66b48a5ec15ed8d3748d
+timeCreated: 1512854249
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: s3_0
+    21300000: e1_shoting_0
+    21300002: e1_shoting_1
+    21300004: e1_shoting_2
+    21300006: e1_shoting_3
+    21300008: e1_shoting_4
+    21300010: e1_shoting_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -44,7 +49,7 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 7
+  alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 10
@@ -106,15 +111,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: s3_0
+      name: e1_shoting_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
-        width: 26
-        height: 12
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 0
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: e1_shoting_1
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: e1_shoting_2
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: e1_shoting_3
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: e1_shoting_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: e1_shoting_5
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

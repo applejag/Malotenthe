@@ -15,27 +15,11 @@ public abstract class RingObject : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Returns a new position from <paramref name="degrees"/> that's on the ring
-	/// </summary>
-	public static Vector3 RingPositionY(float degrees, float y)
-	{
-		return degrees.FromDegrees(RingData.Radius).x_y(_: y);
-	}
-
-	/// <summary>
 	/// Returns a new position from <paramref name="degrees"/> that's on a custom ring <paramref name="radius"/>
 	/// </summary>
 	public static Vector3 RingPosition(float degrees, float radius)
 	{
 		return degrees.FromDegrees(radius).x_y(_: 0);
-	}
-
-	/// <summary>
-	/// Returns a new position from <paramref name="degrees"/> that's on a custom ring <paramref name="radius"/>
-	/// </summary>
-	public static Vector3 RingPositionY(float degrees, float radius, float y)
-	{
-		return degrees.FromDegrees(radius).x_y(_: y);
 	}
 
 	/// <summary>
@@ -59,6 +43,42 @@ public abstract class RingObject : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Returns a new position from <paramref name="degrees"/> that's on the ring
+	/// </summary>
+	public static Vector3 RingPositionY(float degrees, float y)
+	{
+		return degrees.FromDegrees(RingData.Radius).x_y(_: y);
+	}
+
+	/// <summary>
+	/// Returns a new position from <paramref name="degrees"/> that's on a custom ring <paramref name="radius"/>
+	/// </summary>
+	public static Vector3 RingPositionY(float degrees, float radius, float y)
+	{
+		return degrees.FromDegrees(radius).x_y(_: y);
+	}
+
+	/// <summary>
+	/// Returns a new position from <paramref name="position"/> that's on the ring
+	/// </summary>
+	public static Vector3 RingPositionY(Vector3 position, float y)
+	{
+		if (position.xz() == Vector2.zero)
+			return new Vector3(0, y, -RingData.Radius);
+		return (position.xz().normalized * RingData.Radius).x_y(_: y);
+	}
+
+	/// <summary>
+	/// Returns a new position from <paramref name="position"/> that's on a custom ring <paramref name="radius"/>
+	/// </summary>
+	public static Vector3 RingPositionY(Vector3 position, float radius, float y)
+	{
+		if (position.xz() == Vector2.zero)
+			return new Vector3(0, y, -radius);
+		return (position.xz().normalized * radius).x_y(_: y);
+	}
+
+	/// <summary>
 	/// Returns a rotation from <paramref name="position"/> facing in towards the center of the ring.
 	/// </summary>
 	public static Quaternion RingRotation(Vector3 position)
@@ -66,6 +86,16 @@ public abstract class RingObject : MonoBehaviour
 		if (position.xz() == Vector2.zero)
 			return Quaternion.identity;
 		return Quaternion.LookRotation(-position.SetY(0));
+	}
+
+	/// <summary>
+	/// Returns a rotation from <paramref name="position"/> facing in towards the center of the ring, with the additional <paramref name="up"/> parameter.
+	/// </summary>
+	public static Quaternion RingRotation(Vector3 position, Vector3 up)
+	{
+		if (position.xz() == Vector2.zero)
+			return Quaternion.LookRotation(Vector3.forward, up);
+		return Quaternion.LookRotation(-position.SetY(0), up);
 	}
 
 	/// <summary>

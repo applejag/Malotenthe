@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.U2D;
 
@@ -18,13 +19,13 @@ public class EnvironmentGenerator : MonoBehaviour
 	{
 		spawnInnerBoundary = Mathf.Max(RingData.Radius - 20, 0);
 		spawnOuterBoundary = Mathf.Max(RingData.Radius - 5, 0);
-		spawnRandomRange = Mathf.Max(spawnRandomRange, 0);
 	}
 
 	private void OnValidate()
 	{
 		spawnInnerBoundary = Mathf.Clamp(spawnInnerBoundary, 0, spawnOuterBoundary);
 		spawnOuterBoundary = Mathf.Max(spawnOuterBoundary, spawnInnerBoundary);
+		spawnRandomRange = Mathf.Max(spawnRandomRange, 0);
 	}
 
 	public void ClenseEnvironment()
@@ -58,6 +59,8 @@ public class EnvironmentGenerator : MonoBehaviour
 			Debug.LogError("Missing sprite prefab!");
 			return;
 		}
+		
+		float halfRandomRange = 0.5f * spawnRandomRange;
 
 		for (int index = 0; index < layers.Length; index++)
 		{
@@ -69,7 +72,7 @@ public class EnvironmentGenerator : MonoBehaviour
 			layer.atlas.GetSprites(sprites);
 
 			// Calculate position
-			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / layers.Length);
+			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1));
 
 			float angleMultiplier = 360f / layer.count;
 			for (int count = 0; count < layer.count; count++)
@@ -78,9 +81,9 @@ public class EnvironmentGenerator : MonoBehaviour
 				float minAngle = angleMultiplier * count;
 				float maxAngle = angleMultiplier * (count + 1);
 				float angle = UnityEngine.Random.Range(minAngle, maxAngle);
-				float radiusRandomness = UnityEngine.Random.Range(-0.5f, 0.5f) * spawnRandomRange;
+				float randomness = UnityEngine.Random.Range(-halfRandomRange, halfRandomRange);
 
-				Vector3 position = RingObject.RingPosition(angle, radius + radiusRandomness);
+				Vector3 position = RingObject.RingPosition(angle, radius + randomness);
 				Quaternion rotation = RingObject.RingRotation(position);
 				
 				int spriteIndex = UnityEngine.Random.Range(0, sprites.Length);
@@ -102,23 +105,48 @@ public class EnvironmentGenerator : MonoBehaviour
 	}
 
 #if UNITY_EDITOR
-	private void DrawGizmosRing(float radius, float theta = 10)
+	private static void DrawGizmosRing(float radius, float width, int numOfSegments)
 	{
-		Vector3 lastPos = RingObject.RingPosition(0, radius);
+		float halfWidth = width * 0.5f;
+		const float y = 0.05f;
+		Vector3 lastPos = RingObject.RingPositionY(0, radius + halfWidth, y);
+		float theta = 360f / numOfSegments;
+
 		for (float angle = theta; angle < 360; angle += theta)
 		{
-			Vector3 nextPos = RingObject.RingPosition(angle, radius);
+			Vector3 nextPos = RingObject.RingPositionY(angle, radius + halfWidth, y);
 			Gizmos.DrawLine(lastPos, nextPos);
+
+			if (Math.Abs(width) > 0.01f)
+			{
+				Vector3 innerLastPos = RingObject.RingPositionY(lastPos, radius - halfWidth, y);
+				Vector3 innerNextPos = RingObject.RingPositionY(angle, radius - halfWidth, y);
+				Gizmos.DrawLine(innerLastPos, innerNextPos);
+				Gizmos.DrawLine(innerLastPos, lastPos);
+			}
 			lastPos = nextPos;
 		}
-		Gizmos.DrawLine(lastPos, RingObject.RingPosition(0, radius));
+		Gizmos.DrawLine(lastPos, RingObject.RingPosition(0, radius + halfWidth));
+
+		if (Math.Abs(width) > 0.01f)
+		{
+			Vector3 innerLastPos = RingObject.RingPositionY(lastPos, radius - halfWidth, y);
+			Vector3 innerNextPos = RingObject.RingPositionY(0, radius - halfWidth, y);
+			Gizmos.DrawLine(innerLastPos, innerNextPos);
+			Gizmos.DrawLine(innerLastPos, lastPos);
+		}
+	}
+
+	private static void DrawGizmosRing(float radius)
+	{
+		DrawGizmosRing(radius, 0, Mathf.Max(Mathf.FloorToInt(radius * 0.15f), 6));
 	}
 
 	private void OnDrawGizmosSelected()
 	{
 		Gizmos.color = Color.red;
-		DrawGizmosRing(spawnInnerBoundary);
-		DrawGizmosRing(spawnOuterBoundary);
+		DrawGizmosRing(spawnInnerBoundary-0.05f, 0, layers.Min(l => l.count));
+		DrawGizmosRing(spawnOuterBoundary+0.05f, 0, layers.Max(l => l.count));
 		for (int index = 0; index < layers.Length; index++)
 		{
 			Layer layer = layers[index];
@@ -126,18 +154,9 @@ public class EnvironmentGenerator : MonoBehaviour
 
 			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1));
 			Gizmos.color = Color.blue;
-			DrawGizmosRing(radius);
+			DrawGizmosRing(radius, 0, layer.count);
 			Gizmos.color = new Color(1,0,1,0.5f);
-			DrawGizmosRing(radius - spawnRandomRange * 0.5f);
-			DrawGizmosRing(radius + spawnRandomRange * 0.5f);
-
-			Gizmos.color = Color.yellow;
-			for (int count = 0; count < layer.count; count++)
-			{
-				Vector3 pos = RingObject.RingPosition(360f * count / layer.count, radius);
-				Gizmos.DrawRay(pos, Vector3.up);
-				Gizmos.DrawSphere(pos, 0.5f);
-			}
+			DrawGizmosRing(radius, spawnRandomRange, layer.count);
 		}
 	}
 #endif

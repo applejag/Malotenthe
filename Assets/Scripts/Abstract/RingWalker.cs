@@ -27,7 +27,24 @@ public abstract class RingWalker : RingObject
 	private Vector2 m_headOffset = Vector2.up * 2;
 	public Vector3 HeadPosition { get { return transform.TransformPoint(m_headOffset); } }
 
+	[Header("Animations")]
+	public Animator animBody;
+	public SpriteRenderer spriteBody;
+
+	[SerializeField, HideInInspector]
+	protected bool initialSpriteFlip;
+
+	[Header("Movement")]
+	public float velocityTerminal = 8;
+	public float velocityJump = 15;
+
+
 	public Rigidbody Body { get; private set; }
+
+	protected virtual void Start()
+	{
+		initialSpriteFlip = spriteBody.flipX;
+	}
 
 	protected virtual void Awake() {
 		Body = GetComponent<Rigidbody>();
@@ -73,8 +90,20 @@ public abstract class RingWalker : RingObject
 		Body.MoveRotation(RingRotation(position));
 	}
 
+	protected void ParentUpdate(bool moveAnim, bool movePhysx, float horizontal)
+	{
+		spriteBody.flipX = !isFacingRight ^ initialSpriteFlip;
 
-    public static void CalculateRotation(float inAngle, out float outAngle, out bool facingRight)
+		if (movePhysx)
+			Body.velocity = (transform.right.xz() * horizontal * velocityTerminal).x_y(Body.velocity.y);
+
+		// Update animators
+		animBody.SetFloat("Speed", Body.velocity.xz().magnitude);
+		animBody.SetBool("Moving", moveAnim);
+		animBody.SetBool("Grounded", Grounded);
+	}
+
+	public static void CalculateRotation(float inAngle, out float outAngle, out bool facingRight)
     {
         facingRight = inAngle < 90 || inAngle > 270;
         outAngle = facingRight ? inAngle : inAngle - 180;

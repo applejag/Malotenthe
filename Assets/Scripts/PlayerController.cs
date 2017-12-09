@@ -6,31 +6,16 @@ using UnityEngine;
 
 public sealed class PlayerController : RingWalker {
 
-	[Header("Movement")]
-	public float velocityTerminal = 8;
-	public float velocityJump = 15;
 	[Range(0,1)]
 	public float velocityShootingPenalty = 0.5f;
 
 	[Header("Shooting")]
 	public Weapon weapon;
 
-	[Header("Animations")]
-	public Animator animBody;
-	public SpriteRenderer spriteBody;
-
-	[SerializeField, HideInInspector]
-	private bool initialSpriteFlip;
-
 	protected override void Awake() {
 		base.Awake();
 		
 		isFacingRight = true;
-	}
-
-	private void Start()
-	{
-		initialSpriteFlip = spriteBody.flipX;
 	}
 
 	private void OnEnable()
@@ -76,8 +61,6 @@ public sealed class PlayerController : RingWalker {
 			isFacingRight = horizontal > 0;
 		}
 
-		Body.velocity = (transform.right.xz() * horizontal * velocityTerminal).x_y(Body.velocity.y);
-
 		if (jump && Grounded) {
 			Body.velocity = Body.velocity.SetY(velocityJump);
 		}
@@ -86,15 +69,9 @@ public sealed class PlayerController : RingWalker {
 		 *	VISUAL UPDATE
 		*/
 
-		// Update animators
-		animBody.SetFloat("Speed", Body.velocity.xz().magnitude);
-		animBody.SetBool("Moving", !horiZero);
-		animBody.SetBool("Grounded", Grounded);
-
 		// Rotate gun
 		float weaponAngle = isFacingRight ? 0 : 180;
 		weapon.SetRotation(weaponAngle, isFacingRight);
-		spriteBody.flipX = !isFacingRight ^ initialSpriteFlip;
 
 		/**
 		 *	SHOOTING
@@ -110,6 +87,7 @@ public sealed class PlayerController : RingWalker {
 			}
 		}
 
+		ParentUpdate(!horiZero, true, horizontal);
 	}
 	
 	public override void Damage(int damage)

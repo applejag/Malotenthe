@@ -12,7 +12,7 @@ namespace GameGUI
 		public GameObject healthbarPrefab;
 		public GameObject damagePopupPrefab;
 		
-		private void Awake()
+		private void OnEnable()
 		{
 			singleton = this;
 		}
