@@ -1,7 +1,6 @@
 ﻿Shader "Sprites/Shadow Unlit" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
-		_Lighting ("Lighting", Color) = (1,1,1,1)
 		[PerRendererData]_MainTex ("Sprite Texture", 2D) = "white" {}
 		_Cutoff("Shadow alpha cutoff", Range(0,1)) = 0.5
 	}
@@ -15,8 +14,8 @@
 
 		Lighting On
 		Cull Off
-		ZTest Off
-		ZWrite Off
+		//ZTest Off
+		//ZWrite Off
 		
 		CGPROGRAM
 		// Lambert lighting model, and enable shadows on all light types
@@ -28,7 +27,6 @@
 		sampler2D _MainTex;
 		fixed4 _Color;
 		fixed _Cutoff;
-		fixed4 _Lighting;
 
 		struct Input
 		{
@@ -51,5 +49,5 @@
 		}
 		ENDCG
 	}
-	FallBack "Sprites/Diffuse"
+	FallBack "Sprites/Default"
 }

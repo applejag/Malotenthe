@@ -26,7 +26,7 @@ public class e_RingData : Editor {
 		EditorGUILayout.Space();
 
 		if (GUILayout.Button("Send test ray")) {
-			Vector3 position = RingWalker.RingPosition(degrees: 0, y: 2);
+			Vector3 position = RingWalker.RingPositionY(degrees: 0, y: 2);
 			Vector3 forward = -position.SetY(0).normalized;
 			Vector3 right = new Vector3(forward.z, 0, -forward.x);
 

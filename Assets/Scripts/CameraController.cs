@@ -20,7 +20,7 @@ public class CameraController : RingObject {
 
 		float targetDeg = RingDegrees(player.transform.position);
 
-		transform.position = RingPosition(targetDeg, RingData.Radius + dist, y);
+		transform.position = RingPositionY(targetDeg, RingData.Radius + dist, y);
 		transform.rotation = RingRotation(transform.position);
 	}
 

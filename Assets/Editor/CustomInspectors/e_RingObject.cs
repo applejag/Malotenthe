@@ -61,12 +61,12 @@ public class e_RingObject : Editor {
 				script.transform.rotation = RingObject.RingRotation(script.transform.position);
 
 				float y = script.transform.position.y;
-				Vector3 pointZero = RingObject.RingPosition(0, y: y);
+				Vector3 pointZero = RingObject.RingPositionY(0, y: y);
 
 				// Draw nice ring first
 				Vector3 lastPos = pointZero;
 				for (float i = 0; i < 360; i += 0.01f) {
-					Vector3 pos = RingObject.RingPosition(i, y: y);
+					Vector3 pos = RingObject.RingPositionY(i, y: y);
 					Debug.DrawLine(lastPos, pos, col1, time);
 					lastPos = pos;
 				}

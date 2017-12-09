@@ -47,7 +47,7 @@ public class RingData : MonoBehaviour {
 	{
 		if (RayMaxDistance <= 0.01f) return;
 
-		Vector3 pointZero = RingWalker.RingPosition(0, y: 1);
+		Vector3 pointZero = RingObject.RingPositionY(0, 1);
 
 		Color col1 = Color.blue;
 		col1.a = 0.4f;
@@ -59,7 +59,7 @@ public class RingData : MonoBehaviour {
 		Vector3 lastPos = pointZero;
 		Gizmos.color = col1;
 		for (float i = 0; i < 360; i += 0.01f) {
-			Vector3 pos = RingWalker.RingPosition(i, y: 1);
+			Vector3 pos = RingObject.RingPositionY(i, 1);
 			Gizmos.DrawLine(lastPos, pos);
 			lastPos = pos;
 		}
@@ -72,13 +72,12 @@ public class RingData : MonoBehaviour {
 
 		while ((deg += RayErrorAngle) <= 360) {
 
-
 			Gizmos.color = col2;
 
 			Vector3 forward = -lastPos.normalized.SetY(0);
 			Vector3 right = new Vector3(forward.z, 0, -forward.x);
 			Vector3 estPos = lastPos + right * RayMaxDistance;
-			Vector3 nxtPos = RingWalker.RingPosition(deg, y: 1);
+			Vector3 nxtPos = RingObject.RingPositionY(deg, 1);
 
 			Gizmos.DrawLine(lastPos, estPos);
 			Gizmos.DrawLine(estPos, nxtPos);

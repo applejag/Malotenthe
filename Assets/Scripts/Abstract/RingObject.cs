@@ -6,11 +6,18 @@ using UnityEngine;
 public abstract class RingObject : MonoBehaviour
 {
 
+	/// <summary>
+	/// Returns a new position from <paramref name="degrees"/> that's on the ring
+	/// </summary>
+	public static Vector3 RingPosition(float degrees)
+	{
+		return degrees.FromDegrees(RingData.Radius).x_y(_: 0);
+	}
 
 	/// <summary>
 	/// Returns a new position from <paramref name="degrees"/> that's on the ring
 	/// </summary>
-	public static Vector3 RingPosition(float degrees, float y = 0)
+	public static Vector3 RingPositionY(float degrees, float y)
 	{
 		return degrees.FromDegrees(RingData.Radius).x_y(_: y);
 	}
@@ -18,7 +25,15 @@ public abstract class RingObject : MonoBehaviour
 	/// <summary>
 	/// Returns a new position from <paramref name="degrees"/> that's on a custom ring <paramref name="radius"/>
 	/// </summary>
-	public static Vector3 RingPosition(float degrees, float radius, float y = 0)
+	public static Vector3 RingPosition(float degrees, float radius)
+	{
+		return degrees.FromDegrees(radius).x_y(_: 0);
+	}
+
+	/// <summary>
+	/// Returns a new position from <paramref name="degrees"/> that's on a custom ring <paramref name="radius"/>
+	/// </summary>
+	public static Vector3 RingPositionY(float degrees, float radius, float y)
 	{
 		return degrees.FromDegrees(radius).x_y(_: y);
 	}
