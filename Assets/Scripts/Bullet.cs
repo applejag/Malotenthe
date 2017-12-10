@@ -13,7 +13,7 @@ public class Bullet : RingObject
 	public float speed = 20;
 	public LayerMask hitMask = 1;
 	public float selfDestruct = 5;
-	[Range(0,1)]
+	[Range(0,2)]
 	public float gravityScale = 1;
 	
 	private Vector3 gravity;
