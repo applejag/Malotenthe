@@ -11,8 +11,7 @@ public abstract class Weapon : MonoBehaviour {
 
 	public abstract void OnInputBegan();
 	public abstract void OnInputEnded();
-	public abstract IEnumerator ShootCoroutine();
-	public float reloadTime = 2;
+	public abstract IEnumerator OnShootCoroutine();
 
 	private Coroutine currentCoroutine;
 
@@ -27,6 +26,13 @@ public abstract class Weapon : MonoBehaviour {
 
 	public delegate void WeaponEvent(Weapon source);
 	public delegate void WeaponReloadEvent(Weapon source, float reloadTime);
+
+	private void Reset()
+	{
+		gunAnim = GetComponentInChildren<Animator>();
+		if (gunAnim)
+			shootPoint = gunAnim.transform;
+	}
 
 	public void SpawnBullet(GameObject prefab)
 	{
@@ -44,14 +50,24 @@ public abstract class Weapon : MonoBehaviour {
 	public void TryStartShootCycleCoroutine()
 	{
 		if (CanShoot)
-			StartCoroutine(FullShootCycleCoroutine());
+			StartCoroutine(ShootCoroutine());
+	}
+	
+	public void TryReloadCoroutine(float reloadTime)
+	{
+		if (!IsReloading)
+			StartCoroutine(ReloadCoroutine(reloadTime));
 	}
 
-	private IEnumerator FullShootCycleCoroutine()
+	private IEnumerator ShootCoroutine()
 	{
 		IsShooting = true;
-		yield return StartCoroutine(ShootCoroutine());
+		yield return StartCoroutine(OnShootCoroutine());
 		IsShooting = false;
+	}
+
+	private IEnumerator ReloadCoroutine(float reloadTime)
+	{
 		IsReloading = true;
 		if (WeaponReloading != null) WeaponReloading(this, reloadTime);
 		yield return new WaitForSeconds(reloadTime);

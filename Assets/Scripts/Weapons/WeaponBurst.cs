@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using GameGUI;
 using UnityEngine;
 
-public sealed class WeaponsBurst : Weapon
+public sealed class WeaponBurst : Weapon
 {
+	public float reloadTime = 2;
 	public GameObject bulletPrefab;
 
 	[Header("Burst settings")]
@@ -22,11 +23,12 @@ public sealed class WeaponsBurst : Weapon
 		// Do nofin
 	}
 
-	public override IEnumerator ShootCoroutine()
+	public override IEnumerator OnShootCoroutine()
 	{
 		for (int i = 0; i < bulletsPerBurst; i++) {
 			SpawnBullet(bulletPrefab);
 			yield return new WaitForSeconds(1 / bulletsPerSecond);
 		}
+		TryReloadCoroutine(reloadTime);
 	}
 }

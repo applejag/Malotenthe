@@ -9,8 +9,7 @@ namespace GameGUI
 	public class Reloadbar : MonoBehaviour
 	{
 		[SerializeField, HideInInspector] private SlowSlider slider;
-
-		public Weapon weapon;
+		[SerializeField, HideInInspector] private Weapon weapon;
 
 		public Image blinkImage;
 		public float blinkTime = 0.2f;
@@ -20,6 +19,8 @@ namespace GameGUI
 		private void Awake()
 		{
 			slider = GetComponent<SlowSlider>();
+			weapon = FindObjectOfType<PlayerController>().weapon;
+			this.enabled = weapon;
 		}
 
 		private void OnEnable()

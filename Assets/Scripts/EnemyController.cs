@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameGUI;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class EnemyController : RingWalker {
@@ -16,6 +17,7 @@ public class EnemyController : RingWalker {
 	public SpriteRenderer spriteHead;
 	public SpriteRenderer spriteBackleg;
 	public Transform HeadTransform { get { return spriteHead ? spriteHead.transform : (spriteBody ? spriteBody.transform : transform); } }
+	public float postDeadDespawnDelay = 5;
 
     private PlayerController player;
     private bool aimAtPlayer;
@@ -85,11 +87,12 @@ public class EnemyController : RingWalker {
 		ParentUpdate(shouldMove, isMoving, horizontal);
 	}
 
-    float AngleTowardsPlayer()
+    private float AngleTowardsPlayer()
     {
         if (!player || player.IsDead) return 0;
         Vector3 direction = transform.InverseTransformDirection(player.transform.position - transform.position);
-        return (direction.xy().ToDegrees() + 360) % 360;
+	    float degrees = direction.x > 0 ? bulletDirection.ToDegrees() : (-bulletDirection.ToDegrees());
+	    return (direction.xy().ToDegrees() + degrees + 360) % 360;
     }
 
     private bool PlayerInRange()
@@ -105,6 +108,7 @@ public class EnemyController : RingWalker {
 		return dist <= bulletRange;
 	}
 
+	[UsedImplicitly]
 	private void AnimationEvent_Shoot()
 	{
 	    if (bulletPrefab == null) return;
@@ -116,11 +120,13 @@ public class EnemyController : RingWalker {
         Instantiate(bulletPrefab, position, rotation);
     }
 
+    [UsedImplicitly]
     private void AnimationEvent_ContinueAiming()
     {
         aimAtPlayer = true;
     }
 
+    [UsedImplicitly]
     private void AnimationEvent_StopAiming()
     {
         aimAtPlayer = false;
@@ -140,25 +146,37 @@ public class EnemyController : RingWalker {
 		Gizmos.DrawWireSphere(transform.position, bulletRange);
 	}
 
+	private IEnumerator OnDeathCoroutine()
+	{
+		yield return new WaitForSeconds(postDeadDespawnDelay);
+		
+		// disable rigidbody
+		Body.angularVelocity = Vector3.zero;
+		Body.detectCollisions = false;
+		Body.useGravity = false;
+
+		// Move through ground
+		Body.velocity = Vector3.down;
+		yield return new WaitForSeconds(5);
+
+		Destroy(gameObject);
+	}
+
 	public override void Damage(int damage)
 	{
+		bool died = IsDead;
 		base.Damage(damage);
+		died = IsDead && !died;
+
+		if (died)
+			StartCoroutine(OnDeathCoroutine());
 
 		if (healthbar == null)
 			healthbar = GameGUI.GameGUI.CreateHealthbar(this);
 		healthbar.UpdateSliderFromWalkerHealth();
 
-		if (IsDead) {
-			animBody.SetBool("Dead", true);
-
-			foreach (Collider col in GetComponentsInChildren<Collider>())
-				col.enabled = false;
-			
-			Body.isKinematic = true;
+		if (IsDead)
 			this.enabled = false;
-
-		} else
-			animBody.SetTrigger("Hit");
 	}
 
 
@@ -179,18 +197,18 @@ public class EnemyController : RingWalker {
 #if UNITY_EDITOR
         if (UnityEditor.EditorApplication.isPlaying == false)
         {
-	        Vector3 direction = HeadTransform.TransformDirection(bulletDirection);
+	        Vector3 direction = HeadTransform.right;/*TransformDirection(bulletDirection);*/
 	        return RingProjectDirection(position, direction).normalized;
         }
 #endif
         if (isFacingRight)
         {
-	        Vector3 direction = HeadTransform.TransformDirection(bulletDirection);
+	        Vector3 direction = HeadTransform.right;/*TransformDirection(bulletDirection);*/
 	        return RingProjectDirection(position, direction).normalized;
         }
         else
         {
-	        Vector3 direction = HeadTransform.TransformDirection(bulletDirection.FlipX());
+	        Vector3 direction = HeadTransform.TransformDirection(Vector3.left);
 	        return RingProjectDirection(position, direction).normalized;
         }
     }

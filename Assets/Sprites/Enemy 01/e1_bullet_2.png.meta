@@ -1,12 +1,11 @@
 fileFormatVersion: 2
-guid: b85b6ecd0287f4745900d2b3391858fb
-timeCreated: 1512670333
+guid: 3141ee1fb46f8ff43976e038cf924488
+timeCreated: 1513205928
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: reload_bar_sprite_0
-    21300002: reload_bar_sprite_1
-    21300004: reload_bar_sprite_2
+    21300000: e1_bullet_2_0
+    21300002: e1_bullet_2_1
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -108,43 +107,29 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: reload_bar_sprite_0
+      name: e1_bullet_2_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 50
-        width: 112
-        height: 12
+        x: 0
+        y: 0
+        width: 9
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: reload_bar_sprite_1
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 26
-        width: 130
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 11, y: 0, z: 11, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: reload_bar_sprite_2
+      name: e1_bullet_2_1
       rect:
         serializedVersion: 2
         x: 9
-        y: 5
-        width: 112
-        height: 12
+        y: 0
+        width: 9
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

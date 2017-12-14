@@ -1,11 +1,15 @@
 fileFormatVersion: 2
-guid: b3294e7c1fc4f4f469409ebcd7317997
-timeCreated: 1503686478
+guid: 57f9ffb2c1a79e0478ca2a1f05ca6274
+timeCreated: 1513193102
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: hp_bar_sprite_0
-    21300002: hp_bar_sprite_1
+    21300000: c1_run_0
+    21300002: c1_run_1
+    21300004: c1_run_2
+    21300006: c1_run_3
+    21300008: c1_run_4
+    21300010: c1_run_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -107,30 +111,86 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hp_bar_sprite_0
+      name: c1_run_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 28
-        width: 112
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1777778}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: hp_bar_sprite_1
+      name: c1_run_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 4
-        width: 130
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 11, y: 0, z: 11, w: 0}
+        x: 45
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_run_2
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_run_3
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_run_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c1_run_5
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 0
+        width: 45
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1777778}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0

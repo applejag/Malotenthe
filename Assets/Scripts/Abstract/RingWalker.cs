@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ExtensionMethods;
 using System;
+using UnityEngine.Serialization;
 
 public abstract class RingWalker : RingObject
 {
@@ -20,6 +21,8 @@ public abstract class RingWalker : RingObject
 	public int health = 20;
 	public int maxHealth = 20;
 	public bool IsDead { get; private set; }
+	[SingleLayer]
+	public int deadLayerMask = 1;
 	public float HealthPercentage { get { return maxHealth == 0 ? 0 : (float)health / maxHealth; } }
 
 	[Header("Misc.")]
@@ -36,8 +39,25 @@ public abstract class RingWalker : RingObject
 
 	[Header("Movement")]
 	public float velocityTerminal = 8;
-	public float velocityJump = 15;
+	[FormerlySerializedAs("velocityJump")]
+	public float velocityJumpHeight = 15;
 
+	private float lastVelocityJumpForce = -1;
+	public float VelocityJumpForce
+	{
+		get
+		{
+			if (lastVelocityJumpForce < 0)
+			{
+				float g = Physics.gravity.y;
+				float h = velocityJumpHeight;
+				float t = Mathf.Sqrt(-2 * h / g);
+				return lastVelocityJumpForce = -g * t;
+			}
+			else
+				return lastVelocityJumpForce;
+		}
+	}
 
 	public Rigidbody Body { get; private set; }
 
@@ -48,6 +68,11 @@ public abstract class RingWalker : RingObject
 
 	protected virtual void Awake() {
 		Body = GetComponent<Rigidbody>();
+	}
+
+	protected virtual void OnValidate()
+	{
+		lastVelocityJumpForce = VelocityJumpForce;
 	}
 
 	/// <summary>
@@ -115,6 +140,14 @@ public abstract class RingWalker : RingObject
 		health -= damage;
 		IsDead = health <= 0;
 		GameGUI.GameGUI.CreateDamagePopup(HeadPosition, damage);
+
+		if (IsDead)
+		{
+			animBody.SetBool("Dead", true);
+			gameObject.SetLayerRecursive(deadLayerMask);
+		} 
+		else
+			animBody.SetTrigger("Hit");
 	}
 
 }
