@@ -219,14 +219,14 @@ public class e_Transform : Editor {
 
 	private const float POSITION_MAX = 100000.0f;
 
-	private static GUIContent positionGUIContent = new GUIContent(LocalString("Position")
+	private static readonly GUIContent positionGUIContent = new GUIContent(LocalString("Position")
 																 , LocalString("The local position of this Game Object relative to the parent."));
-	private static GUIContent rotationGUIContent = new GUIContent(LocalString("Rotation")
+	private static readonly GUIContent rotationGUIContent = new GUIContent(LocalString("Rotation")
 																 , LocalString("The local rotation of this Game Object relative to the parent."));
-	private static GUIContent scaleGUIContent = new GUIContent(LocalString("Scale")
+	private static readonly GUIContent scaleGUIContent = new GUIContent(LocalString("Scale")
 																 , LocalString("The local scaling of this Game Object relative to the parent."));
 
-	private static string positionWarningText = LocalString("Due to floating-point precision limitations, it is recommended to bring the world coordinates of the GameObject within a smaller range.");
+	private static readonly string positionWarningText = LocalString("Due to floating-point precision limitations, it is recommended to bring the world coordinates of the GameObject within a smaller range.");
 
 	private SerializedProperty positionProperty;
 	private SerializedProperty rotationProperty;

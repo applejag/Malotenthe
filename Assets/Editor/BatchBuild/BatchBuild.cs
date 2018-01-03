@@ -11,10 +11,9 @@ public class BatchBuild {
 		string path = EditorUtility.SaveFilePanel("Choose location of built games", "", "", "");
 		if (path.Length == 0) return;
 
-		string filename;
-		if (Path.GetExtension(path) == ".All files")
-			filename = Path.GetFileNameWithoutExtension(path);
-		else filename = Path.GetFileName(path);
+		string filename = Path.GetExtension(path) == ".All files"
+			? Path.GetFileNameWithoutExtension(path)
+			: Path.GetFileName(path);
 
 		path = Path.Combine(Path.GetDirectoryName(path), filename);
 
@@ -25,7 +24,6 @@ public class BatchBuild {
 		_BuildGame(path, filename, BuildTarget.StandaloneOSX);
 		_BuildGame(path, filename, BuildTarget.StandaloneLinux);
 		string f = _BuildGame(path, filename, BuildTarget.StandaloneLinux64);
-
 
 		Debug.Log("Batch build complete!");
 		EditorUtility.DisplayDialog("Batch Build", "Building for Windows 32bit, Windows 64bit, OS X 32bit, OS X 64bit, Linux 32bit, Linux 64bit complete!", "OK");
@@ -38,10 +36,9 @@ public class BatchBuild {
 		string path = EditorUtility.SaveFilePanel("Choose location of built games", "", "", "");
 		if (path.Length == 0) return;
 
-		string filename;
-		if (Path.GetExtension(path) == ".All files")
-			filename = Path.GetFileNameWithoutExtension(path);
-		else filename = Path.GetFileName(path);
+		string filename = Path.GetExtension(path) == ".All files"
+			? Path.GetFileNameWithoutExtension(path)
+			: Path.GetFileName(path);
 
 		Debug.Log("Starting batch build...");
 
@@ -59,7 +56,7 @@ public class BatchBuild {
 
 	private static string _BuildGame(string path, string filename, BuildTarget target) {
 
-		BuildPlayerOptions options = new BuildPlayerOptions();
+		var options = new BuildPlayerOptions();
 		string ext = null;
 		options.scenes = EditorBuildSettings.scenes
 			.Where(s => s.enabled)
@@ -73,7 +70,7 @@ public class BatchBuild {
 			case BuildTarget.StandaloneOSX: ext = "_osx64.app"; break;
 			case BuildTarget.StandaloneLinux: ext = "_linux32.x86"; break;
 			case BuildTarget.StandaloneLinux64: ext = "_linux64.x86_64"; break;
-			default: throw new System.Exception("Unsupported build target type \"" + target.ToString() + "\"");
+			default: throw new System.Exception("Unsupported build target type \"" + target + "\"");
 		}
 
 		string folder = path + Path.GetFileNameWithoutExtension(ext);
