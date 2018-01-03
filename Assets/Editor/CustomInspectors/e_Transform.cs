@@ -233,7 +233,9 @@ public class e_Transform : Editor {
 	private SerializedProperty scaleProperty;
 
 	private static string LocalString(string text) {
-		return LocalizationDatabase.GetLocalizedString(text);
+		// LocalizationDatabase deprecated or somethin?
+		//return LocalizationDatabase.GetLocalizedString(text);
+		return text;
 	}
 
 	private bool ValidatePosition(Vector3 position) {

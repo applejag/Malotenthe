@@ -22,8 +22,7 @@ public class BatchBuild {
 
 		_BuildGame(path, filename, BuildTarget.StandaloneWindows);
 		_BuildGame(path, filename, BuildTarget.StandaloneWindows64);
-		_BuildGame(path, filename, BuildTarget.StandaloneOSXIntel);
-		_BuildGame(path, filename, BuildTarget.StandaloneOSXIntel64);
+		_BuildGame(path, filename, BuildTarget.StandaloneOSX);
 		_BuildGame(path, filename, BuildTarget.StandaloneLinux);
 		string f = _BuildGame(path, filename, BuildTarget.StandaloneLinux64);
 
@@ -48,8 +47,7 @@ public class BatchBuild {
 
 		_BuildGameAndZip(path, filename, BuildTarget.StandaloneWindows);
 		_BuildGameAndZip(path, filename, BuildTarget.StandaloneWindows64);
-		_BuildGameAndZip(path, filename, BuildTarget.StandaloneOSXIntel);
-		_BuildGameAndZip(path, filename, BuildTarget.StandaloneOSXIntel64);
+		_BuildGameAndZip(path, filename, BuildTarget.StandaloneOSX);
 		_BuildGameAndZip(path, filename, BuildTarget.StandaloneLinux);
 		string f = _BuildGameAndZip(path, filename, BuildTarget.StandaloneLinux64);
 
@@ -72,8 +70,7 @@ public class BatchBuild {
 		switch (target) {
 			case BuildTarget.StandaloneWindows: ext = "_win32.exe"; break;
 			case BuildTarget.StandaloneWindows64: ext = "_win64.exe"; break;
-			case BuildTarget.StandaloneOSXIntel: ext = "_osx32.app"; break;
-			case BuildTarget.StandaloneOSXIntel64: ext = "_osx64.app"; break;
+			case BuildTarget.StandaloneOSX: ext = "_osx64.app"; break;
 			case BuildTarget.StandaloneLinux: ext = "_linux32.x86"; break;
 			case BuildTarget.StandaloneLinux64: ext = "_linux64.x86_64"; break;
 			default: throw new System.Exception("Unsupported build target type \"" + target.ToString() + "\"");
