@@ -1686,7 +1686,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -11008,7 +11008,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -13071,7 +13071,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -16800,7 +16800,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -20832,7 +20832,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -21460,7 +21460,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -21834,7 +21834,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -27213,7 +27213,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -31147,7 +31147,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -36316,7 +36316,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -37722,7 +37722,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
@@ -38901,7 +38901,7 @@ Sprite:
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 2
-    texture: {fileID: 2, guid: 00000000000000000000000000000000, type: 0}
+    texture: {fileID: 0}
     alphaTexture: {fileID: 0}
     m_SubMeshes:
     - serializedVersion: 2
