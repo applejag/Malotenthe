@@ -2,6 +2,7 @@
 using ExtensionMethods;
 using System.Collections;
 using System.Collections.Generic;
+using GameGUI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -117,7 +118,9 @@ public sealed class PlayerController : RingWalker {
 	{
 		base.Damage(damage);
 
-		if (IsDead)
-			this.enabled = false;
+		if (!IsDead) return;
+
+		this.enabled = false;
+		DiedGUI.FadeInGameOverScreen();
 	}
 }

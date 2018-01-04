@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 160349413bdd47842adf4b87a0f9d58c
-timeCreated: 1513204419
+timeCreated: 1515075849
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -67,6 +67,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   - buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -76,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   - buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -85,6 +87,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   - buildTarget: Windows Store Apps
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -94,6 +97,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   - buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -103,6 +107,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -110,9 +115,9 @@ TextureImporter:
       name: reload
       rect:
         serializedVersion: 2
-        x: 3
+        x: 1
         y: 15
-        width: 85
+        width: 89
         height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -124,9 +129,9 @@ TextureImporter:
       name: hp
       rect:
         serializedVersion: 2
-        x: 3
+        x: 1
         y: 1
-        width: 112
+        width: 116
         height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
