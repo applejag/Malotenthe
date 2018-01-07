@@ -119,7 +119,7 @@ public sealed class PlayerController : RingWalker {
 	private void OnEventDeath(int damage, object source)
 	{
 		this.enabled = false;
-		DiedGUI.FadeInGameOverScreen();
+		DiedGUI.FadeInGameOverScreen(GetComponent<WalkerStatistics>());
 	}
 
 }

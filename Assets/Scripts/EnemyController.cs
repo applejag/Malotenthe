@@ -130,8 +130,11 @@ public class EnemyController : RingWalker {
 	    Vector3 direction = GetShootDirection(position);
         Quaternion rotation = Quaternion.LookRotation(direction);
 
-        Instantiate(bulletPrefab, position, rotation);
-    }
+        GameObject clone = Instantiate(bulletPrefab, position, rotation);
+
+		var bullet = clone.GetComponent<Bullet>();
+		bullet.owner = this;
+	}
 
     [UsedImplicitly]
     private void AnimationEvent_ContinueAiming()
@@ -145,10 +148,9 @@ public class EnemyController : RingWalker {
         aimAtPlayer = false;
     }
 
-    protected override void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
 	    if (!enabled) return;
-		base.OnDrawGizmosSelected();
 
 		Gizmos.color = Color.red;
 	    Vector3 position = GetShootPosition();

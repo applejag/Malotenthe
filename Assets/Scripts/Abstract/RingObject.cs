@@ -139,8 +139,11 @@ public abstract class RingObject : MonoBehaviour
 
 			if (success = Physics.Raycast(position, forward, out rayhit, RingData.RayMaxDistance, layerMask)) {
 				goto FinishedCasting;
-			} else
+			}
+#if DEBUG
+			else
 				Debug.DrawRay(position, forward.normalized * maxDistance, Color.cyan, 2);
+#endif
 
 			maxDistance -= RingData.RayArcDistance;
 			position = RingPosition(position + forward * RingData.RayMaxDistance, radius);
@@ -153,10 +156,12 @@ public abstract class RingObject : MonoBehaviour
 
 		FinishedCasting:
 
+#if DEBUG
 		if (success)
 			Debug.DrawLine(position, rayhit.point, Color.red, 2);
 		else
 			Debug.DrawRay(position, forward.normalized * maxDistance, Color.cyan, 2);
+#endif
 
 		// Custom struct
 		hit = new RingRaycastHit(

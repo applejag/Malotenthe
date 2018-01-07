@@ -90,7 +90,12 @@ public abstract class RingWalker : RingObject
 	/// </summary>
 	protected bool IsGrounded()
 	{
-		Collider[] colliders = Physics.OverlapSphere(transform.TransformPoint(groundedOffset), groundedRadius, groundedRayMask, QueryTriggerInteraction.Ignore);
+		Collider[] colliders = Physics.OverlapSphere(
+			position: transform.TransformPoint(groundedOffset), 
+			radius: groundedRadius, 
+			layerMask: groundedRayMask, 
+			queryTriggerInteraction: QueryTriggerInteraction.Ignore);
+
 		foreach (Collider col in colliders) {
 			if (col.transform.IsChildOf(transform) == false)
 				return true;
@@ -98,7 +103,7 @@ public abstract class RingWalker : RingObject
 		return false;
 	}
 
-	protected virtual void OnDrawGizmosSelected()
+	protected virtual void OnDrawGizmos()
 	{
 		Gizmos.color = IsGrounded() ? Color.red : Color.cyan;
 		Gizmos.DrawWireSphere(transform.TransformPoint(groundedOffset), groundedRadius);
@@ -108,7 +113,10 @@ public abstract class RingWalker : RingObject
 		Gizmos.color = Color.yellow;
 		Gizmos.DrawLine(pos, pos.SetY(head.y));
 		Gizmos.DrawLine(pos.SetY(head.y), head);
-		Gizmos.DrawWireCube(head, Vector3.one.SetY(0) * 0.5f);
+		Gizmos.DrawWireCube(head, new Vector3(0.5f, 0, 0.5f));
+
+		Gizmos.color = new Color(1, 1, 0, 0.25f);
+		Gizmos.DrawLine(pos, new Vector3(0, pos.y, 0));
 	}
 
 	protected virtual void FixedUpdate()
@@ -165,7 +173,7 @@ public abstract class RingWalker : RingObject
 
 		var bullet = source as Bullet;
 		RingWalker bsource = bullet ? bullet.owner : null;
-		Debug.LogFormat(this, "{0} took {1} damage from {2}", name, damage, bsource ? bsource.name : null);
+		Debug.LogFormat(this, "{0} took {1} damage from {2}", name, damage, bsource ? bsource.name : "<NULL>");
 		if (bsource)
 		{
 			// Event : damage dealt

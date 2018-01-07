@@ -12,6 +12,12 @@ namespace GameGUI
 		public CanvasGroup group;
 		public float fadeInTime = 2;
 
+		public SlowIntegerCounter counterLivedTime;
+		public SlowIntegerCounter counterKills;
+		public SlowIntegerCounter counterDamageDealt;
+		public SlowIntegerCounter counterDamageTaken;
+		public SlowIntegerCounter counterScore;
+
 		[SerializeField, HideInInspector]
 		private Coroutine fadeInRoutine;
 
@@ -20,7 +26,7 @@ namespace GameGUI
 			singleton = this;
 		}
 
-		private IEnumerator FadeInRoutine(float delay)
+		private IEnumerator FadeInRoutine(float delay, WalkerStatistics stats)
 		{
 			yield return new WaitForSeconds(delay);
 
@@ -41,16 +47,40 @@ namespace GameGUI
 
 			group.alpha = 1;
 			group.interactable = true;
+			yield return new WaitForSeconds(1.4f);
+
+			{
+				const float inbetween = 0.6f;
+				const float counterTime = 1.5f;
+
+				int timeAlive = Mathf.CeilToInt(stats.TimeAliveTotal);
+				int numOfKills = stats.NumOfKills;
+				int damageDealt = stats.DamageDealt;
+				int damageTaken = stats.DamageTaken;
+				int score = Mathf.RoundToInt(50f * (damageDealt + numOfKills * numOfKills) / Mathf.Sqrt(damageTaken) + 24f * timeAlive / numOfKills);
+
+				counterLivedTime.SetTargetValue(timeAlive, counterTime);
+				yield return new WaitForSeconds(inbetween);
+				counterKills.SetTargetValue(numOfKills, counterTime);
+				yield return new WaitForSeconds(inbetween);
+				counterDamageDealt.SetTargetValue(damageDealt, counterTime);
+				yield return new WaitForSeconds(inbetween);
+				counterDamageTaken.SetTargetValue(damageTaken, counterTime);
+
+				yield return new WaitForSeconds(counterTime * 2);
+
+				counterScore.SetTargetValue(score, counterTime * 3f);
+			}
 
 			fadeInRoutine = null;
 		}
 
-		public static void FadeInGameOverScreen(float delay = 0)
+		public static void FadeInGameOverScreen(WalkerStatistics playerStatistics, float delay = 0)
 		{
 			if (singleton.fadeInRoutine != null)
 				singleton.StopCoroutine(singleton.fadeInRoutine);
 
-			singleton.fadeInRoutine = singleton.StartCoroutine(singleton.FadeInRoutine(delay));
+			singleton.fadeInRoutine = singleton.StartCoroutine(singleton.FadeInRoutine(delay, playerStatistics));
 		}
 
 		public void ActionRestart()
