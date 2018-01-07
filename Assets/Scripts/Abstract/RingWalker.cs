@@ -25,9 +25,12 @@ public abstract class RingWalker : RingObject
 	public int deadLayerMask = 1;
 	public float HealthPercentage { get { return maxHealth == 0 ? 0 : (float)health / maxHealth; } }
 
+	[Header("Shooting")]
+	public Weapon weapon;
+
 	[Header("Misc.")]
 	[SerializeField]
-	private Vector2 m_headOffset = Vector2.up * 2;
+	protected Vector2 m_headOffset = Vector2.up * 2;
 	public Vector3 HeadPosition { get { return transform.TransformPoint(m_headOffset); } }
 
 	[Header("Animations")]
@@ -60,6 +63,13 @@ public abstract class RingWalker : RingObject
 	}
 
 	public Rigidbody Body { get; private set; }
+
+	public delegate void DamageEvent(int damage, object source);
+
+	public event DamageEvent EventDamageTaken;
+	public event DamageEvent EventDeath;
+	public event DamageEvent EventDamageDealt;
+	public event DamageEvent EventKilled;
 
 	protected virtual void Start()
 	{
@@ -134,7 +144,7 @@ public abstract class RingWalker : RingObject
         outAngle = facingRight ? inAngle : inAngle - 180;
     }
 
-	public virtual void Damage(int damage)
+	public void Damage(int damage, object source)
 	{
 		if (IsDead) return;
 		health -= damage;
@@ -148,6 +158,28 @@ public abstract class RingWalker : RingObject
 		} 
 		else
 			animBody.SetTrigger("Hit");
+
+		// Event : damage taken
+		if (EventDamageTaken != null)
+			EventDamageTaken(damage, source);
+
+		var bullet = source as Bullet;
+		RingWalker bsource = bullet ? bullet.owner : null;
+		Debug.LogFormat(this, "{0} took {1} damage from {2}", name, damage, bsource ? bsource.name : null);
+		if (bsource)
+		{
+			// Event : damage dealt
+			if (bsource.EventDamageDealt != null)
+				bsource.EventDamageDealt(damage, this);
+
+			if (bsource.EventKilled != null && IsDead)
+				bsource.EventKilled(damage, this);
+		}
+
+		// Event : died
+		if (EventDeath != null && IsDead)
+			EventDeath(damage, source);
 	}
+
 
 }

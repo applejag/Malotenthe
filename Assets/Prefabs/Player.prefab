@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4134444834917562}
   - component: {fileID: 54315832012528446}
   - component: {fileID: 114396321506229204}
+  - component: {fileID: 114800967907433494}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -245,6 +246,7 @@ MonoBehaviour:
   health: 50
   maxHealth: 50
   deadLayerMask: 10
+  weapon: {fileID: 114493004189181628}
   m_headOffset: {x: 0, y: 2.5}
   animBody: {fileID: 95522583994709484}
   spriteBody: {fileID: 212100389454997664}
@@ -253,7 +255,6 @@ MonoBehaviour:
   velocityJumpHeight: 6
   velocityRunningMultiplier: 1.75
   velocityShootingMultiplier: 0.5
-  weapon: {fileID: 114493004189181628}
 --- !u!114 &114493004189181628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -265,12 +266,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b1837f0c30af334eb2a424b88d2fcbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 114396321506229204}
   gunAnim: {fileID: 95272338427768900}
   shootPoint: {fileID: 4254013016118504}
   bulletDirection: {x: 1, y: 0}
   bulletPrefab: {fileID: 1401128070382298, guid: 3b5e1b2ee90a6fa44b3e031b18f0f28d,
     type: 2}
   bulletsPerSecond: 2
+--- !u!114 &114800967907433494
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1200060335434256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6205c9fb84af75c4c832d575028607c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageTaken: 0
+  damageDealt: 0
+  numOfKills: 0
+  timeAliveStart: 0
+  timeAliveEnd: 0
 --- !u!135 &135968877887564812
 SphereCollider:
   m_ObjectHideFlags: 1

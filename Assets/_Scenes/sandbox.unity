@@ -10458,7 +10458,7 @@ MonoBehaviour:
   enemiesPerWaveUpper: 3
   betweenEachMeteorite: 1
   betweenEachWave: 20
-  remaingWaitTime: 15
+  remaingWaitTime: 8
   spawnHeight: 150
   enemyPrefab: {fileID: 0}
   player: {fileID: 0}
@@ -37717,12 +37717,12 @@ Prefab:
     - target: {fileID: 224443021285124774, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224443021285124774, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224814391331536178, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
@@ -37742,12 +37742,12 @@ Prefab:
     - target: {fileID: 224814391331536178, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -39.12743
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224814391331536178, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 14.25486
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224046876549504852, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
@@ -37767,12 +37767,12 @@ Prefab:
     - target: {fileID: 224046876549504852, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -65.38229
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224046876549504852, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 14.25486
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224213124452940726, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
@@ -37792,12 +37792,12 @@ Prefab:
     - target: {fileID: 224213124452940726, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -94.50972
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224213124452940726, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224617181174886076, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
@@ -37817,12 +37817,12 @@ Prefab:
     - target: {fileID: 224617181174886076, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -126.50972
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224617181174886076, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224218143730534604, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
@@ -37842,12 +37842,12 @@ Prefab:
     - target: {fileID: 224218143730534604, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -158.50972
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224218143730534604, guid: 4e757849db0fa25479ccda9fa3ca0c9b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4e757849db0fa25479ccda9fa3ca0c9b, type: 2}

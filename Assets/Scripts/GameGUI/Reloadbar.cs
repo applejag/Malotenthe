@@ -49,7 +49,7 @@ namespace GameGUI
 			Reloading(reloadTime);
 		}
 
-		private void OnWeaponReloaded(Weapon source)
+		private void OnWeaponReloaded(Weapon source, float reloadTime)
 		{
 			Reloaded();
 		}

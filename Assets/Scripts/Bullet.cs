@@ -7,6 +7,8 @@ public class Bullet : RingObject
 	[Header("Object references")]
 	public TrailRenderer trail;
 	public ParticleSystem particles;
+	[HideInInspector]
+	public RingWalker owner = null;
 
 	[Header("Settings")]
 	public int damage = 1;
@@ -36,24 +38,18 @@ public class Bullet : RingObject
 		bool hitAnything = RingRaycast(transform.position, forward, out hit, maxDistance, hitMask);
 
 		Vector3 lastPosition = transform.position;
-		transform.position = hit.lastPoint;
+		transform.position = hit.point;
 		transform.forward = transform.position - lastPosition;
 
 		if (hitAnything) {
 
-		    EnemyController enemy = hit.hit.rigidbody ? hit.hit.rigidbody.GetComponent<EnemyController>() : null;
-		    if (enemy)
-		    {
-		        enemy.Damage(damage);
-		    }
+			RingWalker walker = hit.rigidbody
+				? hit.rigidbody.GetComponent<RingWalker>()
+				: null;
+			if (walker)
+				walker.Damage(damage, this);
 
-		    PlayerController player = hit.hit.rigidbody ? hit.hit.rigidbody.GetComponent<PlayerController>() : null;
-		    if (player)
-		    {
-		        player.Damage(damage);
-		    }
-
-            SelfDestruct();
+			SelfDestruct();
 		}
 	}
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour {
 
+	public RingWalker owner;
 	public Animator gunAnim;
 	public Transform shootPoint;
 	public Vector2 bulletDirection = Vector3.right;
@@ -13,8 +14,6 @@ public abstract class Weapon : MonoBehaviour {
 	public abstract void OnInputEnded();
 	public abstract IEnumerator OnShootCoroutine();
 
-	private Coroutine currentCoroutine;
-
 	public bool IsShooting { get; private set; }
 	public bool IsReloading { get; private set; }
 	public bool CanShoot { get { return !IsReloading && !IsShooting; } }
@@ -22,16 +21,22 @@ public abstract class Weapon : MonoBehaviour {
 
 	public event WeaponEvent WeaponFired;
 	public event WeaponReloadEvent WeaponReloading;
-	public event WeaponEvent WeaponReloaded;
+	public event WeaponReloadEvent WeaponReloaded;
 
 	public delegate void WeaponEvent(Weapon source);
 	public delegate void WeaponReloadEvent(Weapon source, float reloadTime);
 
 	private void Reset()
 	{
+		owner = GetComponentInParent<RingWalker>();
 		gunAnim = GetComponentInChildren<Animator>();
-		if (gunAnim)
-			shootPoint = gunAnim.transform;
+		shootPoint = gunAnim ? gunAnim.transform : transform;
+	}
+
+	private void Start()
+	{
+		if (owner == null)
+			Debug.LogWarningFormat(this, "Weapon {0} ({1}) is missing an owner!", transform.GetPath(), GetType().Name);
 	}
 
 	public void SpawnBullet(GameObject prefab)
@@ -40,7 +45,13 @@ public abstract class Weapon : MonoBehaviour {
 		Vector3 direction = GetShootDirection(position);
 		Quaternion rotation = Quaternion.LookRotation(direction);
 
-		Instantiate(prefab, position, rotation);
+		GameObject clone = Instantiate(prefab, position, rotation);
+
+		var bullet = clone.GetComponent<Bullet>();
+		if (bullet)
+			bullet.owner = owner;
+		else
+			Debug.LogError("Unable to find bullet script!", this);
 
 		gunAnim.SetTrigger("Shoot");
 
@@ -72,7 +83,7 @@ public abstract class Weapon : MonoBehaviour {
 		if (WeaponReloading != null) WeaponReloading(this, reloadTime);
 		yield return new WaitForSeconds(reloadTime);
 		IsReloading = false;
-		if (WeaponReloaded != null) WeaponReloaded(this);
+		if (WeaponReloaded != null) WeaponReloaded(this, reloadTime);
 	}
 
 	public virtual void SetRotation(float lookAngle, bool facingRight)

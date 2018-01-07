@@ -159,12 +159,11 @@ public abstract class RingObject : MonoBehaviour
 			Debug.DrawRay(position, forward.normalized * maxDistance, Color.cyan, 2);
 
 		// Custom struct
-		hit = new RingRaycastHit {
-			hit = rayhit,
-			origins = origins.ToArray(),
-			lastPoint = success ? rayhit.point : RingPosition(position + forward * maxDistance, radius),
-		};
-
+		hit = new RingRaycastHit(
+			prevPoints: origins.ToArray(),
+			point: success ? rayhit.point : RingPosition(position + forward * maxDistance, radius),
+			rayhit: rayhit);
+			
 		return success;
 	}
 
@@ -172,7 +171,25 @@ public abstract class RingObject : MonoBehaviour
 
 public struct RingRaycastHit
 {
-	public Vector3[] origins;
-	public Vector3 lastPoint;
-	public RaycastHit hit;
+	public Vector3[] prevPoints;
+	public Vector3 point;
+
+	public Transform transform;
+	public Collider collider;
+	public Rigidbody rigidbody;
+	public float distance;
+	public Vector3 normal;
+
+	public RingRaycastHit(Vector3[] prevPoints, Vector3 point, RaycastHit rayhit)
+	{
+		this.prevPoints = prevPoints;
+		this.point = point;
+
+		collider = rayhit.collider;
+		transform = rayhit.transform;
+		rigidbody = rayhit.rigidbody;
+		distance = rayhit.distance;
+		normal = rayhit.normal;
+		point = rayhit.point;
+	}
 }

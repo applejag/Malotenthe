@@ -13,9 +13,6 @@ public sealed class PlayerController : RingWalker {
 	[Range(0,1)]
 	public float velocityShootingMultiplier = 0.5f;
 
-	[Header("Shooting")]
-	public Weapon weapon;
-
 	private float lastGroundedVelocityMultiplier;
 
 	protected override void Awake() {
@@ -27,11 +24,13 @@ public sealed class PlayerController : RingWalker {
 	private void OnEnable()
 	{
 		weapon.WeaponFired += OnWeaponFired;
+		EventDeath += OnEventDeath;
 	}
 
 	private void OnDisable()
 	{
 		weapon.WeaponFired -= OnWeaponFired;
+		EventDeath -= OnEventDeath;
 	}
 
 	private void OnWeaponFired(Weapon source)
@@ -111,16 +110,16 @@ public sealed class PlayerController : RingWalker {
 			}
 		}
 
-		ParentUpdate(!horiZero, true, horizontal);
+		ParentUpdate(
+			moveAnim: !horiZero, 
+			movePhysx: true, 
+			horizontal: horizontal);
 	}
-	
-	public override void Damage(int damage)
+
+	private void OnEventDeath(int damage, object source)
 	{
-		base.Damage(damage);
-
-		if (!IsDead) return;
-
 		this.enabled = false;
 		DiedGUI.FadeInGameOverScreen();
 	}
+
 }

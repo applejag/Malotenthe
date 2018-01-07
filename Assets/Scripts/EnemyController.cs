@@ -1,4 +1,5 @@
-﻿using ExtensionMethods;
+﻿using System;
+using ExtensionMethods;
 using System.Collections;
 using System.Collections.Generic;
 using GameGUI;
@@ -28,6 +29,18 @@ public class EnemyController : RingWalker {
 		base.Awake();
 
 		player = FindObjectOfType<PlayerController>();
+	}
+
+	private void OnEnable()
+	{
+		EventDamageTaken += OnEventDamageTaken;
+		EventDeath += OnEventDeath;
+	}
+
+	private void OnDisable()
+	{
+		EventDamageTaken -= OnEventDamageTaken;
+		EventDeath -= OnEventDeath;
 	}
 
 	private void Update()
@@ -162,23 +175,18 @@ public class EnemyController : RingWalker {
 		Destroy(gameObject);
 	}
 
-	public override void Damage(int damage)
+	private void OnEventDamageTaken(int damage, object source)
 	{
-		bool died = IsDead;
-		base.Damage(damage);
-		died = IsDead && !died;
-
-		if (died)
-			StartCoroutine(OnDeathCoroutine());
-
 		if (healthbar == null)
 			healthbar = GameGUI.GameGUI.CreateHealthbar(this);
 		healthbar.UpdateSliderFromWalkerHealth();
-
-		if (IsDead)
-			this.enabled = false;
 	}
 
+	private void OnEventDeath(int damage, object source)
+	{
+		StartCoroutine(OnDeathCoroutine());
+		this.enabled = false;
+	}
 
     protected Vector3 GetShootPosition()
     {

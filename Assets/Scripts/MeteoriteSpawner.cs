@@ -39,7 +39,7 @@ public class MeteoriteSpawner : RingObject
 		bool hitAnything = RingRaycast(transform.position, forward, out hit, maxDistance, hitMask);
 
 		Vector3 lastPosition = transform.position;
-		transform.position = hit.lastPoint;
+		transform.position = hit.point;
 		transform.forward = transform.position - lastPosition;
 
 		if (hitAnything)
