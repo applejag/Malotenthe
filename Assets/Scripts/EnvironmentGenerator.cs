@@ -36,18 +36,17 @@ public class EnvironmentGenerator : MonoBehaviour
 			anyDeleted = false;
 			foreach (Transform child in transform)
 			{
-				if (child != spritePrefab.transform)
-				{
+				if (!child.gameObject.activeSelf) continue;
+
 #if UNITY_EDITOR
-					if (UnityEditor.EditorApplication.isPlaying)
-						Destroy(child.gameObject);
-					else
-						DestroyImmediate(child.gameObject);
+				if (UnityEditor.EditorApplication.isPlaying)
+					Destroy(child.gameObject);
+				else
+					DestroyImmediate(child.gameObject);
 #else
 					Destroy(child.gameObject);
 #endif
-					anyDeleted = true;
-				}
+				anyDeleted = true;
 			}
 		} while (anyDeleted);
 	}
@@ -60,7 +59,6 @@ public class EnvironmentGenerator : MonoBehaviour
 			return;
 		}
 		
-		float halfRandomRange = 0.5f * spawnRandomRange;
 
 		for (int index = 0; index < layers.Length; index++)
 		{
@@ -68,11 +66,13 @@ public class EnvironmentGenerator : MonoBehaviour
 			if (!layer.atlas) continue;
 
 			// Fetch sprites
-			var sprites = new Sprite[layer.atlas.spriteCount];
-			layer.atlas.GetSprites(sprites);
+			var atlas = layer.atlas as SpriteAtlas;
+			Sprite[] sprites = atlas != null ? new Sprite[atlas.spriteCount] : null;
+			if (atlas != null) atlas.GetSprites(sprites);
 
 			// Calculate position
-			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1));
+			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1)) + layer.rangeOffset;
+			float halfRandomRange = 0.5f * spawnRandomRange + layer.rangeOffset;
 
 			var container = new GameObject(layer.atlas.name);
 			container.transform.SetParent(transform, false);
@@ -88,23 +88,58 @@ public class EnvironmentGenerator : MonoBehaviour
 
 				Vector3 position = RingObject.RingPosition(angle, radius + randomness);
 				Quaternion rotation = RingObject.RingRotation(position);
-				
-				int spriteIndex = UnityEngine.Random.Range(0, sprites.Length);
-				Sprite sprite = sprites[spriteIndex];
-				string name = spritePrefab.name + " - " + sprites[spriteIndex].name;
-				if (name.EndsWith("(Clone)")) name = name.Substring(0, name.Length - 7);
 
-				// Clone prefab
-				GameObject clone = Instantiate(spritePrefab, position, rotation);
-				clone.transform.SetParent(container.transform, true);
-				clone.SetActive(true);
-				clone.gameObject.name = name;
+				if (atlas != null)
+				{
+					int spriteIndex = UnityEngine.Random.Range(0, sprites.Length);
+					string cloneName = spritePrefab.name + " - " + sprites[spriteIndex].name;
+					Sprite sprite = sprites[spriteIndex];
+					if (cloneName.EndsWith("(Clone)"))
+						cloneName = cloneName.Substring(0, cloneName.Length - 7);
 
-				// Apply sprite
-				var spriteRenderer = clone.GetComponent<SpriteRenderer>();
-				spriteRenderer.sprite = sprite;
+					// Clone prefab
+					GameObject clone = InstantiatePrefab(spritePrefab, position, rotation);
+					clone.transform.SetParent(container.transform, true);
+					clone.SetActive(true);
+					clone.gameObject.name = cloneName;
+
+					// Apply sprite
+					var spriteRenderer = clone.GetComponent<SpriteRenderer>();
+					spriteRenderer.sprite = sprite;
+				}
+				else if (layer.atlas is GameObject)
+				{
+
+					// Clone prefab
+					var go = (GameObject) layer.atlas;
+					GameObject clone = InstantiatePrefab(go, position, rotation);
+					clone.transform.SetParent(container.transform, true);
+					clone.SetActive(true);
+				}
+				else
+				{
+					// ???
+					throw new ArgumentOutOfRangeException("What is this, a joke? Why you giving me an object of this type??", layer.atlas, "layer[" + index + "].atlas");
+				}
 			}
 		}
+	}
+
+	private static GameObject InstantiatePrefab(GameObject prefab, Vector3 position, Quaternion rotation)
+	{
+
+#if UNITY_EDITOR
+		if (UnityEditor.PrefabUtility.GetPrefabType(prefab) == UnityEditor.PrefabType.Prefab
+		    || UnityEditor.PrefabUtility.GetPrefabType(prefab) == UnityEditor.PrefabType.ModelPrefab)
+		{
+			var clone = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab);
+			clone.transform.position = position;
+			clone.transform.rotation = rotation;
+			return clone;
+		}
+		else
+#endif
+			return Instantiate(prefab, position, rotation);
 	}
 
 #if UNITY_EDITOR
@@ -150,16 +185,16 @@ public class EnvironmentGenerator : MonoBehaviour
 		Gizmos.color = Color.red;
 		DrawGizmosRing(spawnInnerBoundary-0.05f, 0, layers.Min(l => l.count));
 		DrawGizmosRing(spawnOuterBoundary+0.05f, 0, layers.Max(l => l.count));
-		for (int index = 0; index < layers.Length; index++)
+		for (var index = 0; index < layers.Length; index++)
 		{
 			Layer layer = layers[index];
 			if (!layer.atlas) continue;
 
-			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1));
+			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1)) + layer.positionOffset;
 			Gizmos.color = Color.blue;
 			DrawGizmosRing(radius, 0, layer.count);
 			Gizmos.color = new Color(1,0,1,0.5f);
-			DrawGizmosRing(radius, spawnRandomRange, layer.count);
+			DrawGizmosRing(radius, spawnRandomRange + layer.rangeOffset, layer.count);
 		}
 	}
 #endif
@@ -167,7 +202,9 @@ public class EnvironmentGenerator : MonoBehaviour
 	[Serializable]
 	public struct Layer
 	{
-		public SpriteAtlas atlas;
+		public UnityEngine.Object atlas;
 		public int count;
+		public float positionOffset;
+		public float rangeOffset;
 	}
 }

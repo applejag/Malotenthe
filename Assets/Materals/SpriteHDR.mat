@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Sprite with shadow
-  m_Shader: {fileID: 4800000, guid: adf465ec5b7ba324b8119d865d0e045d, type: 3}
+  m_Name: SpriteHDR
+  m_Shader: {fileID: 4800000, guid: 87f41ae5a261a83409818a7da2250750, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -78,7 +78,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 8, g: 8, b: 8, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _Lighting: {r: 1, g: 1, b: 1, a: 1}

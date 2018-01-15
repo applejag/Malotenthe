@@ -41,22 +41,28 @@ public class e_EnvironmentGenerator : Editor
 				SerializedProperty layerProperty = atlases.serializedProperty.GetArrayElementAtIndex(index);
 				SerializedProperty atlasProperty = layerProperty.FindPropertyRelative("atlas");
 				SerializedProperty countProperty = layerProperty.FindPropertyRelative("count");
+				SerializedProperty posOffProperty = layerProperty.FindPropertyRelative("positionOffset");
+				SerializedProperty rangeOffProperty = layerProperty.FindPropertyRelative("rangeOffset");
 
-				const float labelWidth = 60;
+				const float labelWidth = 40;
 				const float countWidth = 40;
 				const float countLabelWidth = 60;
-				var labelRect = new Rect(rect.x, rect.y, labelWidth, rect.height);
-				var atlasRect = new Rect(rect.x + labelWidth, rect.y, rect.width - countWidth - labelWidth - countLabelWidth - 4, rect.height);
-				var countRect = new Rect(rect.xMax - countWidth, rect.y, countWidth, rect.height);
-				var countLabelRect = new Rect(countRect.x - countLabelWidth, rect.y, countLabelWidth, rect.height);
+				var labelRect = new Rect(rect.x, rect.y, labelWidth, EditorGUIUtility.singleLineHeight);
+				var atlasRect = new Rect(rect.x + labelWidth, rect.y, rect.width - countWidth - labelWidth - countLabelWidth - 4, labelRect.height);
+				var countRect = new Rect(rect.xMax - countWidth, rect.y, countWidth, labelRect.height);
+				var countLabelRect = new Rect(countRect.x - countLabelWidth, rect.y, countLabelWidth, labelRect.height);
+				var posOffRect = new Rect(rect.x + labelWidth, labelRect.yMax, rect.width - labelWidth, labelRect.height);
+				var rangeOffRect = new Rect(rect.x + labelWidth, posOffRect.yMax, rect.width - labelWidth, labelRect.height);
 
 				EditorGUI.LabelField(labelRect, label);
 				EditorGUI.PropertyField(atlasRect, atlasProperty, GUIContent.none);
 				EditorGUI.LabelField(countLabelRect, countProperty.displayName);
 				EditorGUI.PropertyField(countRect, countProperty, GUIContent.none);
+				EditorGUI.PropertyField(posOffRect, posOffProperty);
+				EditorGUI.PropertyField(rangeOffRect, rangeOffProperty);
 			},
 
-			elementHeight = EditorGUIUtility.singleLineHeight,
+			elementHeight = EditorGUIUtility.singleLineHeight * 3.4f,
 		};
 
 	}

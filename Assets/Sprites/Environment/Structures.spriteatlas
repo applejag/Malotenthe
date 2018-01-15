@@ -15,7 +15,7 @@ SpriteAtlas:
       textureCompression: 0
       filterMode: 0
       generateMipMaps: 0
-      readable: 0
+      readable: 1
       crunchedCompression: 0
       sRGB: 0
     platformSettings: []
@@ -32,18 +32,20 @@ SpriteAtlas:
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: afe425861bd9f114591203cea8c0e888, type: 3}
+  - {fileID: 21300000, guid: d14a06e76b63c0949bae4536e269e608, type: 3}
+  - {fileID: 21300000, guid: bf43b62e1dd2cbe42a7350457e43f51c, type: 3}
   - {fileID: 21300000, guid: b495171b670d6744a9096780c17e8040, type: 3}
   - {fileID: 21300000, guid: acb079335ac18e94b808b6b09c2a9aa5, type: 3}
   - {fileID: 21300000, guid: 250e3dfcf1e8acc419c84f11bc99495e, type: 3}
   - {fileID: 21300000, guid: 7402682cf97bee34b8c45ed7ef49f51b, type: 3}
-  - {fileID: 21300000, guid: 1e9d2d43017987743aa1167e4db4c66b, type: 3}
-  - {fileID: 21300000, guid: 73a46554b71e28345be9c9dd5ee511e2, type: 3}
   m_PackedSpriteNamesToIndex:
+  - House_2
+  - House_1
+  - House_3
   - Structure_3
   - bigpipe_1
   - Structure_2
   - Structure_1
-  - Lamp_1
-  - Lamp_2
   m_Tag: Structures
   m_IsVariant: 0
