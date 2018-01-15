@@ -74,6 +74,9 @@ public class EnvironmentGenerator : MonoBehaviour
 			// Calculate position
 			float radius = Mathf.Lerp(spawnInnerBoundary, spawnOuterBoundary, index == 0 ? 0 : (float)index / (layers.Length-1));
 
+			var container = new GameObject(layer.atlas.name);
+			container.transform.SetParent(transform, false);
+
 			float angleMultiplier = 360f / layer.count;
 			for (int count = 0; count < layer.count; count++)
 			{
@@ -93,7 +96,7 @@ public class EnvironmentGenerator : MonoBehaviour
 
 				// Clone prefab
 				GameObject clone = Instantiate(spritePrefab, position, rotation);
-				clone.transform.SetParent(transform, true);
+				clone.transform.SetParent(container.transform, true);
 				clone.SetActive(true);
 				clone.gameObject.name = name;
 

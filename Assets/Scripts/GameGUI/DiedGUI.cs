@@ -10,6 +10,7 @@ namespace GameGUI
 		private static DiedGUI singleton;
 
 		public CanvasGroup group;
+		public float delay = 2;
 		public float fadeInTime = 2;
 
 		public SlowIntegerCounter counterLivedTime;
@@ -26,7 +27,7 @@ namespace GameGUI
 			singleton = this;
 		}
 
-		private IEnumerator FadeInRoutine(float delay, WalkerStatistics stats)
+		private IEnumerator FadeInRoutine(WalkerStatistics stats)
 		{
 			yield return new WaitForSeconds(delay);
 
@@ -75,12 +76,12 @@ namespace GameGUI
 			fadeInRoutine = null;
 		}
 
-		public static void FadeInGameOverScreen(WalkerStatistics playerStatistics, float delay = 0)
+		public static void FadeInGameOverScreen(WalkerStatistics playerStatistics)
 		{
 			if (singleton.fadeInRoutine != null)
 				singleton.StopCoroutine(singleton.fadeInRoutine);
 
-			singleton.fadeInRoutine = singleton.StartCoroutine(singleton.FadeInRoutine(delay, playerStatistics));
+			singleton.fadeInRoutine = singleton.StartCoroutine(singleton.FadeInRoutine(playerStatistics));
 		}
 
 		public void ActionRestart()

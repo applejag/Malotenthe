@@ -922,7 +922,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '- E X I T -'
+  m_Text: = E X I T =
 --- !u!114 &114161249002764924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1095,7 +1095,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '- R E S T A R T -'
+  m_Text: = R E S T A R T =
 --- !u!114 &114250158702700740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1374,7 +1374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   group: {fileID: 225148019126149026}
-  fadeInTime: 1.5
+  fadeInTime: 3
   counterLivedTime: {fileID: 114767081851726988}
   counterKills: {fileID: 114998804940595960}
   counterDamageDealt: {fileID: 114048187569930146}
@@ -1788,7 +1788,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'PROJECT: M.A.K.J.
 
-    <color=#FFF6><size=12>PREALPHA-0.2.2</size></color>'
+    <color=#FFF6><size=12>PREALPHA-0.2.3</size></color>'
 --- !u!114 &114807242876370790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2437,7 +2437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 24}
+  m_AnchoredPosition: {x: 0, y: 36}
   m_SizeDelta: {x: -160, y: 30}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!224 &224548440162350584
@@ -2598,8 +2598,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 17}
-  m_SizeDelta: {x: 260, y: -6}
+  m_AnchoredPosition: {x: 0, y: 25.000002}
+  m_SizeDelta: {x: 260, y: 9.999999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224672433591800232
 RectTransform:
